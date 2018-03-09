@@ -1,0 +1,60 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": ["react-app", "airbnb", "prettier", "prettier/react"],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "jsx": true,
+      "modules": true
+    },
+    "sourceType": "module"
+  },
+  "plugins": ["import", "jsx-a11y", "react", "prettier"],
+  "rules": {
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "quotes": ["error", "single"],
+    "no-console": "warn",
+    "semi": ["error", "always"],
+    "radix": "off",
+    "array-callback-return": "off",
+    "consistent-return": "off",
+    "arrow-parens": ["error", "as-needed"],
+    "no-unused-expressions": "off",
+    "max-len": "error",
+    "class-methods-use-this": "error",
+    "no-mixed-operators": "off",
+    "function-paren-newline": "off",
+
+    "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
+    "react/no-array-index-key": "off",
+    "react/forbid-prop-types": 0,
+    "react/require-default-props": 0,
+
+    "import/no-webpack-loader-syntax": "off",
+    "import/no-unresolved": "off",
+
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/no-noninteractive-tabindex": "off",
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
+    "jsx-a11y/label-has-for": "off",
+    "jsx-a11y/href-no-hash": "off",
+    "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }],
+
+    "prettier/prettier": [
+      "error",
+      {
+        "useTabs": false,
+        "printWidth": 110,
+        "tabWidth": 2,
+        "singleQuote": true,
+        "trailingComma": "all",
+        "jsxBracketSameLine": false
+      }
+    ]
+  }
+}

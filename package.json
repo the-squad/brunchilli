@@ -1,0 +1,34 @@
+{
+  "name": "snowball",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@vezeeta/web-components": "^2.15.19",
+    "@vezeeta/web-utils": "^1.8.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-scripts": "1.1.1",
+    "styled-components": "^3.2.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "fix": "./node_modules/.bin/eslint --fix ./src/*",
+    "start-api": "cd api && nodemon index.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn start\" \"yarn start-api\""
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1",
+    "eslint": "^4.18.2",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-config-react-app": "^2.1.0",
+    "eslint-plugin-flowtype": "^2.46.1",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
+    "prettier": "^1.11.1"
+  }
+}
