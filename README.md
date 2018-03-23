@@ -15,9 +15,3 @@ Then run the localhost
 ```bash
 yarn start
 ```
-
-## Create a production build
-
-```bash
-yarn start
-```
