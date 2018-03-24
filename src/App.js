@@ -1,18 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component, Fragment } from 'react';
+import { injectGlobal } from 'styled-components';
+import { Route, Switch, withRouter } from 'react-router-dom';
 
-import './App.css';
+import { FontWieghts } from './base/Fonts';
+import Colors from './base/Colors';
 
-const App = () => (
-  <div className="App">
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <h1 className="App-title">Welcome to React</h1>
-    </header>
-    <p className="App-intro">
-      To get started, edit <code>src/App.js</code> and save to reload.
-    </p>
-  </div>
-);
+import Button from './components/Button';
+import Header from './components/Header';
+import IconLoader from './components/IconLoader';
 
-export default App;
+import Home from './views/Home';
+import Search from './views/Search';
+
+import icons from './selection.json';
+
+/**
+ * Injecting global font family to all HTML nodes
+ */
+injectGlobal`
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+`;
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    IconLoader.getInstance().setIconStore(icons);
+  }
+
+  render() {
+    const loginButton = (
+      <Fragment>
+        <Button primary={false} color={Colors.black} fontWeight={FontWieghts.light}>
+          Login
+        </Button>
+
+        <Button primary={false} color={Colors.black} fontWeight={FontWieghts.light}>
+          Sign up
+        </Button>
+      </Fragment>
+    );
+
+    return (
+      <div className="App">
+        <Header items={loginButton} />
+
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/search/:query" component={Search} />
+        </Switch>
+      </div>
+    );
+  }
+}
+
+export default withRouter(App);
