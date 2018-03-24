@@ -31,7 +31,7 @@ class FoodController extends Controller
             "name" => "required|min:3|max:50",
             "description" => "required|min:5|max:200",
             "price" => "required|numeric",
-            "price" => "required|numeric",
+            "rate" => "required|numeric",
         ]);
     }
 
