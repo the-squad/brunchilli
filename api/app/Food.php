@@ -24,8 +24,29 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Food whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Food wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Food whereRate($value)
+ * @property-read \App\FoodCategory $category
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Comment[] $comments
  */
 class Food extends Model
 {
-    //
+    protected $fillable = ['name','description','price','rate','category_id'];
+
+    public function photos()
+    {
+        return $this->hasMany(Photo::class);
+    }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class,'order_details');
+    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(FoodCategory::class,'category_id');
+    }
 }

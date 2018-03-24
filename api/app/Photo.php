@@ -21,5 +21,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Photo extends Model
 {
-    //
+    protected $fillable = ['path','food_id'];
+    public function food()
+    {
+        return $this->belongsTo(Food::class);
+    }
 }

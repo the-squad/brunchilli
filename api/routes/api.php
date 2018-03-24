@@ -20,4 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('/food','FoodController')->except(["create","edit"]);
 Route::resource('/category','FoodCategoryController')->except(["create","edit"]);
 
+Route::get("/test",function(){
+    return \App\Order::find(1)->foods()->toSql();
+});
+
 
