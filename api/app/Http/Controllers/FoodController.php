@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Comment;
 use App\Food;
 use App\Http\Resources\FoodResource;
 use Illuminate\Http\Request;
@@ -68,4 +69,43 @@ class FoodController extends Controller
     {
         //
     }
+
+    public function createComment(Request $request)
+    {
+        $this->validate($request, [
+            "comment"=>"required|min:3|max:50",
+            "user_id"=>"required|exists:users,id",
+            "food_id"=>"required|exists:foods,id"
+
+        ]);
+        $comment = new Comment();
+        $comment->fill($request->all());
+        if ($comment->save())
+            return response('done',200);
+
+        return response('error',500);
+    }
+
+
+    public function updateComment(Request $request)
+    {
+        $this->validate($request,[
+            "comment" => "required|min:3|max:50",
+        ]);
+
+        $comment = Comment::find($request->id);
+        $comment->fill($request->all());
+        if ($comment->save())
+            return response('done',200);
+        return response('error',500);
+    }
+
+    public function deleteComment(Request $request)
+    {
+        $comment = Comment::find($request->id);
+        if ($comment->delete())
+            return response('done',200);
+        return response('error',500);
+    }
+
 }
