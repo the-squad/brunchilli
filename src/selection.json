@@ -1,0 +1,67 @@
+{
+  "IcoMoonType": "selection",
+  "icons": [
+    {
+      "icon": {
+        "paths": [
+          "M1015.031 971.778l-248.848-248.848c66.753-76.743 107.168-176.873 107.168-286.311-0-240.901-195.945-436.619-436.619-436.619-240.901 0-436.619 195.945-436.619 436.619s195.945 436.619 436.619 436.619c109.439 0 209.568-40.415 286.311-107.168l248.848 248.848c5.903 5.903 13.85 9.082 21.57 9.082s15.667-2.952 21.57-9.082c11.807-11.807 11.807-31.333 0-43.14zM61.19 436.619c0-207.071 168.472-375.315 375.315-375.315 207.071 0 375.315 168.472 375.315 375.315s-168.245 375.542-375.315 375.542c-206.843-0-375.315-168.472-375.315-375.542z"
+        ],
+        "attrs": [
+          {}
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "magnifying-glass"
+        ]
+      },
+      "attrs": [
+        {}
+      ],
+      "properties": {
+        "order": 2,
+        "id": 0,
+        "name": "search",
+        "prevSize": 32,
+        "code": 59648
+      },
+      "setIdx": 0,
+      "setId": 2,
+      "iconIdx": 0
+    }
+  ],
+  "height": 1024,
+  "metadata": {
+    "name": "icomoon"
+  },
+  "preferences": {
+    "showGlyphs": true,
+    "showQuickUse": true,
+    "showQuickUse2": true,
+    "showSVGs": true,
+    "fontPref": {
+      "prefix": "icon-",
+      "metadata": {
+        "fontFamily": "icomoon"
+      },
+      "metrics": {
+        "emSize": 1024,
+        "baseline": 6.25,
+        "whitespace": 50
+      },
+      "embed": false
+    },
+    "imagePref": {
+      "prefix": "icon-",
+      "png": true,
+      "useClassSelector": true,
+      "color": 0,
+      "bgColor": 16777215,
+      "classSelector": ".icon"
+    },
+    "historySize": 50,
+    "showCodes": true,
+    "gridSize": 16
+  }
+}
