@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Comment extends Model
 {
+    protected $fillable = [
+        'comment','food_id','user_id'
+    ];
     public function food()
     {
         return $this->belongsTo(Food::class);

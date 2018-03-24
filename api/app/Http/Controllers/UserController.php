@@ -34,8 +34,18 @@ class UserController extends Controller
     public function Register(Request $request)
     {
         $this->validate($request, [
+            "name"=>"required|alpha|min:3|max:15",
             "email" => "required|email|unique:users,email",
-            "password" => "required|min:5|max:50|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/"
+            "password" => "required|min:6|max:50",
+            "phone"=>"required|digits:11",
+            "address"=>"required|min:6|max:50"
         ]);
+
+        $user = new User();
+        $user->fill($request->all());
+        if ($user->save())
+            return response('done',200);
+
+        return response('error',500);
     }
 }
