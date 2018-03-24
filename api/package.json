@@ -1,34 +1,22 @@
 {
-  "name": "adonis-fullstack-app",
-  "version": "4.1.0",
-  "adonis-version": "4.1.0",
-  "description": "The fullstack application boilerplate for Adonisjs",
-  "main": "index.js",
-  "scripts": {
-    "start": "node server.js",
-    "test": "node ace test"
-  },
-  "keywords": [
-    "adonisjs",
-    "adonis-app"
-  ],
-  "author": "",
-  "license": "UNLICENSED",
-  "private": true,
-  "dependencies": {
-    "@adonisjs/ace": "^5.0.1",
-    "@adonisjs/auth": "^3.0.4",
-    "@adonisjs/bodyparser": "^2.0.2",
-    "@adonisjs/cors": "^1.0.5",
-    "@adonisjs/fold": "^4.0.7",
-    "@adonisjs/framework": "^5.0.5",
-    "@adonisjs/ignitor": "^2.0.6",
-    "@adonisjs/lucid": "^5.0.3",
-    "@adonisjs/session": "^1.0.23",
-    "@adonisjs/shield": "^1.0.6"
-  },
-  "devDependencies": {},
-  "autoload": {
-    "App": "./app"
-  }
+    "private": true,
+    "scripts": {
+        "dev": "npm run development",
+        "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "watch": "npm run development -- --watch",
+        "watch-poll": "npm run watch -- --watch-poll",
+        "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "prod": "npm run production",
+        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+    },
+    "devDependencies": {
+        "axios": "^0.18",
+        "bootstrap": "^4.0.0",
+        "popper.js": "^1.12",
+        "cross-env": "^5.1",
+        "jquery": "^3.2",
+        "laravel-mix": "^2.0",
+        "lodash": "^4.17.4",
+        "vue": "^2.5.7"
+    }
 }

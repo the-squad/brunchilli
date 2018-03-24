@@ -1,15 +1,13 @@
-# Node modules
-node_modules
-
-# Adonis directory for storing tmp files
-tmp
-
-# Environment variables, never commit this file
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+/.idea
+/.vscode
+/.vagrant
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
 .env
-
-# Lock files
-package-lock.json
-yarn.lock
-
-# The development sqlite file
-database/development.sqlite
