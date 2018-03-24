@@ -21,3 +21,4 @@ Route::resource('/food','FoodController')->except(["create","edit"]);
 Route::resource('/category','FoodCategoryController')->except(["create","edit"]);
 Route::post('/login','UserController@Login');
 
+

@@ -27,7 +27,12 @@ class FoodController extends Controller
      */
     public function store(Request $request)
     {
-
+        $this->validate($request,[
+            "name" => "required|min:3|max:50",
+            "description" => "required|min:5|max:200",
+            "price" => "required|numeric",
+            "rate" => "required|numeric",
+        ]);
     }
 
     /**

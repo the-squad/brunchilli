@@ -18,8 +18,17 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $food_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Comment whereComment($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Comment whereFoodId($value)
+ * @property-read \App\Food $food
  */
 class Comment extends Model
 {
-    //
+    public function food()
+    {
+        return $this->belongsTo(Food::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
