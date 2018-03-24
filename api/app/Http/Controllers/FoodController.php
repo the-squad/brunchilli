@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Food;
 use App\Http\Resources\FoodResource;
+use App\Photo;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class FoodController extends Controller
 {
@@ -29,10 +31,32 @@ class FoodController extends Controller
     {
         $this->validate($request,[
             "name" => "required|min:3|max:50",
-            "description" => "required|min:5|max:200",
+            "description" => "required|min:2|max:200",
             "price" => "required|numeric",
             "rate" => "required|numeric",
+            "category_id" => "required|exists:food_categories,id",
+            "img" => "required|array|min:1|max:5",
+            "img.*" => "required"
         ]);
+        \DB::beginTransaction();
+        $i = 0;
+        $food = new Food();
+        $food->fill($request->all());
+        $food->save();
+        foreach ($request->img as $photo){
+            $png_url = "/img/".time()."_".$i.".png";
+            $path = public_path()."/storage". $png_url;
+            $data = explode(',',$photo)[1];
+            $data = base64_decode($data);
+            Image::make($data)->resize(500,500)->save($path);
+            $img = new Photo();
+            $img->path = $png_url;
+            $img->food_id = $food->id;
+            if(!$img->save())
+                \DB::rollBack();
+            $i++;
+        }
+        \DB::commit();
     }
 
     /**
