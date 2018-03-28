@@ -55,7 +55,7 @@ const Text = styled(Base)`
 Text.defaultProps = {
   font: Fonts.primary,
   color: Colors.black,
-  type: FontTypes.body,
+  type: FontTypes.Body,
   tag: 'label',
 };
 
