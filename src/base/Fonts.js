@@ -12,14 +12,16 @@ const Fonts = {
 };
 
 const FontWieghts = {
+  bold: 700,
   semiBold: 600,
   normal: 500,
   light: 400,
+  veryLight: 300,
 };
 
 const FontSizes = {
   [FontTypes.BigTitle]: '30px',
-  [FontTypes.Title]: '20px',
+  [FontTypes.Title]: '19px',
   [FontTypes.Heading]: '16px',
   [FontTypes.Body]: '14px',
   [FontTypes.Caption]: '12px',
