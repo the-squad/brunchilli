@@ -40,7 +40,6 @@ class BackgroundImage extends Component {
   }
 
   componentWillUnmount() {
-    document.body.style.background = '#fff';
     clearInterval(this.changeBackgroundInterval);
   }
 

@@ -30,7 +30,8 @@ class Home extends Component {
   }
 
   onSearch = query => {
-    this.props.history.push(`/search/${query}`);
+    const queryString = `search=${query}`;
+    this.props.history.push(`/results/?${queryString}`);
   };
 
   render() {

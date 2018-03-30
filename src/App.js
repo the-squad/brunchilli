@@ -50,7 +50,7 @@ class App extends Component {
 
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route path="/search/:query" component={Search} />
+          <Route path="/results" component={Search} />
         </Switch>
       </div>
     );
