@@ -34,7 +34,7 @@ const FoodCard = props => {
     <CardContainer>
       <Photo src={photos[0]} />
       <Space width={Spacing.get('6x')} />
-      <FoodItem shouldTrimDesc onFoodNameClick={showFoodDetails} {...props} />
+      <FoodItem shouldTrimDesc="true" onFoodNameClick={showFoodDetails} {...props} />
     </CardContainer>
   );
 };

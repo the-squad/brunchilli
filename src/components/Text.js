@@ -20,6 +20,25 @@ injectGlobal`
   }
 `;
 
+const propTypes = {
+  fontWeight: PropTypes.oneOf(Object.values(FontWeights)),
+  font: PropTypes.oneOf(Object.values(Fonts)),
+  color: PropTypes.oneOf(Object.values(Colors)),
+  type: PropTypes.oneOf(Object.values(FontTypes)),
+  tag: PropTypes.string,
+  children: PropTypes.any,
+  width: PropTypes.string,
+  textalign: PropTypes.string,
+  lineheight: PropTypes.string,
+};
+
+const defaultProps = {
+  font: Fonts.primary,
+  color: Colors.black,
+  type: FontTypes.Body,
+  tag: 'label',
+};
+
 /**
  * Generate basic HTML node
  * @param {object} props
@@ -29,38 +48,25 @@ const Base = props => {
   return <Tag {...props}>{props.children}</Tag>;
 };
 
-Base.propTypes = {
-  fontWeight: PropTypes.oneOf(Object.values(FontWeights)),
-  font: PropTypes.oneOf(Object.values(Fonts)),
-  color: PropTypes.oneOf(Object.values(Colors)),
-  type: PropTypes.oneOf(Object.values(FontTypes)),
-  tag: PropTypes.string,
-  children: PropTypes.any,
-  width: PropTypes.string,
-  textAlign: PropTypes.string,
-  lineHeight: PropTypes.string,
-};
+Base.propTypes = propTypes;
+Base.defaultProps = defaultProps;
 
 const Text = styled(Base)`
   color: ${props => props.color};
   font-family: '${props => props.font}';
   font-display: fallback;
   font-size: ${props => FontSizes[props.type]};
-  line-height: ${props => (props.lineHeight ? props.lineHeight : FontSizes[props.type])};
+  line-height: ${props => (props.lineheight ? props.lineheight : FontSizes[props.type])};
   font-weight: ${props => props.fontWeight};
   user-select: none;
-  text-align: ${props => props.textAlign};
+  text-align: ${props => props.textalign};
   width: ${props => props.width};
 `;
 
 /**
  * Default props will render <label type="body" />
  */
-Text.defaultProps = {
-  font: Fonts.primary,
-  color: Colors.black,
-  type: FontTypes.Body,
-  tag: 'label',
-};
+Text.propTypes = propTypes;
+Text.defaultProps = defaultProps;
 
 export default Text;
