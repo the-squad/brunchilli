@@ -13,15 +13,15 @@ import Spacing from '../base/Spacing';
 
 const EmptyState = ({ icon, text }) => (
   <Center>
-    <Icon icon={IconLoader.getInstance().get(icon)} width={30} color={Colors.grey} />
+    {icon && <Icon icon={IconLoader.getInstance().get(icon)} width={30} color={Colors.grey} />}
     <Space display="block" height={Spacing.get('3x')} />
     <Text
       type={FontTypes.Heading}
       color={Colors.grey}
-      textAlign="center"
+      textalign="center"
       width="80%"
       fontWeight={FontWeights.light}
-      lineHeight="22px"
+      lineheight="22px"
     >
       {text}
     </Text>

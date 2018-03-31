@@ -124,10 +124,7 @@ class Cart extends Component {
         <Space display="block" height={Spacing.get('6x')} />
 
         {items.size === 0 ? (
-          <EmptyState
-            icon="cart"
-            text="Your cart is empty. Start adding items to be displayed here"
-          />
+          <EmptyState text="Your cart is empty. Start adding items to be displayed here" />
         ) : (
           <ItemsList>
             {itemsValues.map(item => (
