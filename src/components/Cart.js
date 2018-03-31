@@ -54,7 +54,7 @@ class Cart extends Component {
         newItems.set(id, {
           ...alreadyExistedItem,
           count: newCount,
-          total: newTotal,
+          total: parseFloat(newTotal),
         });
       } else {
         newItems.set(id, {
@@ -108,6 +108,7 @@ class Cart extends Component {
       const itemTotal = item.count * item.price;
       total += itemTotal;
     });
+    total = parseFloat(total);
 
     return total.toFixed(2);
   };
@@ -145,7 +146,7 @@ class Cart extends Component {
 
         <TotalContainer>
           <Text>Total: </Text>
-          <Price price={parseInt(total)} />
+          <Price price={parseFloat(total)} />
         </TotalContainer>
 
         <Space display="block" height={Spacing.get('6x')} />

@@ -55,7 +55,8 @@ class CartItem extends Component {
 
   calculateTotal = count => {
     const { id, price } = this.props;
-    const total = (count * price).toFixed(2);
+    let total = (count * price).toFixed(2);
+    total = parseFloat(total);
     this.props.onCountChange(id, count, total);
   };
 
@@ -86,7 +87,7 @@ class CartItem extends Component {
         </CountContainer>
 
         <TotalContainer>
-          <Price price={total} color={Colors.black} />
+          <Price price={parseFloat(total)} color={Colors.black} />
         </TotalContainer>
       </CartItemContainer>
     );
