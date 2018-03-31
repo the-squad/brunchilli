@@ -13,11 +13,11 @@ import Button from './Button';
 import Rate from './Rate';
 import Price from './Price';
 import AlignBottom from './AlignBottom';
-import AlignLeft from './AlignLeft';
+import AlignRight from './AlignRight';
 
 import Spacing from '../base/Spacing';
 import Colors from '../base/Colors';
-import { FontTypes, FontWieghts } from '../base/Fonts';
+import { FontTypes, FontWeights } from '../base/Fonts';
 
 const DetailsContainer = styled.div`
   display: grid;
@@ -29,6 +29,7 @@ const ContentContainer = styled.div`
   display: grid;
   grid-template-columns: auto auto;
   grid-column-gap: ${Spacing.get('1x')};
+  padding-top: ${Spacing.get('2x')};
 `;
 
 const Description = Text.extend`
@@ -49,6 +50,22 @@ const AddToCartButton = Button.extend`
 `;
 
 class FoodCard extends Component {
+  static propTypes = {
+    name: PropTypes.string,
+    desc: PropTypes.string,
+    price: PropTypes.string,
+    rate: PropTypes.number,
+    category: PropTypes.string,
+    shouldTrimDesc: PropTypes.bool,
+    onFoodNameClick: PropTypes.func,
+    onAddToCartClick: PropTypes.func,
+    showAddToCartButton: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    showAddToCartButton: true,
+  };
+
   state = {
     isAddedToCart: false,
   };
@@ -59,17 +76,23 @@ class FoodCard extends Component {
         isAddedToCart: !prevProps.isAddedToCart,
       }),
       () => {
-        this.props.onAddToCartClick(this.props);
+        this.props.onAddToCartClick({ ...this.props, deleteCallback: this.removeFromCart });
       },
     );
   };
 
   onFoodNameClick = () => {
-    this.props.onFoodNameClick(this.props);
+    this.props.onFoodNameClick({ ...this.props, deleteCallback: this.removeFromCart });
+  };
+
+  removeFromCart = () => {
+    this.setState(() => ({
+      isAddedToCart: false,
+    }));
   };
 
   render() {
-    const { name, desc, price, rate, category, shouldTrimDesc } = this.props;
+    const { name, desc, price, rate, category, shouldTrimDesc, showAddToCartButton } = this.props;
     const { isAddedToCart } = this.state;
     const addToCartText = isAddedToCart ? 'Added to cart' : 'Add to cart';
     const addToCartIcon = isAddedToCart ? 'success' : 'cart';
@@ -78,20 +101,25 @@ class FoodCard extends Component {
       <DetailsContainer>
         <ContentContainer>
           <div>
-            <Text
-              onClick={this.onFoodNameClick}
-              tag="h1"
-              type={FontTypes.Heading}
-              fontWeight={FontWieghts.bold}
-            >
-              {name}
-            </Text>
+            <CenterVertical>
+              <Text
+                onClick={this.onFoodNameClick}
+                tag="h1"
+                type={FontTypes.Heading}
+                fontWeight={FontWeights.bold}
+              >
+                {name}
+              </Text>
+              <Space width={Spacing.get('3x')} />
+              <Rate rate={rate} />
+            </CenterVertical>
+
             <Space display="block" height={Spacing.get('1x')} />
             <Description
               tag="label"
               type={FontTypes.Body}
               color={Colors.grey}
-              fontWeight={FontWieghts.light}
+              fontWeight={FontWeights.light}
               shouldTrim={shouldTrimDesc}
             >
               {desc}
@@ -99,41 +127,33 @@ class FoodCard extends Component {
             <Space display="block" height={Spacing.get('1x')} />
           </div>
 
-          <AlignLeft>
+          <AlignRight>
             <Price price={price} />
-          </AlignLeft>
+          </AlignRight>
         </ContentContainer>
 
         <AlignBottom>
           <SpaceBetween>
-            <CenterVertical>
-              <Tag>{category}</Tag>
-              <Space width={Spacing.get('3x')} />
-              <Rate rate={rate} />
-            </CenterVertical>
-            <AddToCartButton primary={false} onClick={this.onCartClick}>
-              <CenterVertical>
-                <Icon icon={IconLoader.getInstance().get(addToCartIcon)} color={Colors.primary} width={15} />
-                <Space width={Spacing.get('2x')} />
-                {addToCartText}
-              </CenterVertical>
-            </AddToCartButton>
+            <Tag>{category}</Tag>
+
+            {showAddToCartButton && (
+              <AddToCartButton primary={false} onClick={this.onCartClick}>
+                <CenterVertical>
+                  <Icon
+                    icon={IconLoader.getInstance().get(addToCartIcon)}
+                    color={Colors.primary}
+                    width={15}
+                  />
+                  <Space width={Spacing.get('2x')} />
+                  {addToCartText}
+                </CenterVertical>
+              </AddToCartButton>
+            )}
           </SpaceBetween>
         </AlignBottom>
       </DetailsContainer>
     );
   }
 }
-
-FoodCard.propTypes = {
-  name: PropTypes.string,
-  desc: PropTypes.string,
-  price: PropTypes.string,
-  rate: PropTypes.number,
-  category: PropTypes.string,
-  shouldTrimDesc: PropTypes.bool,
-  onFoodNameClick: PropTypes.func,
-  onAddToCartClick: PropTypes.func,
-};
 
 export default FoodCard;

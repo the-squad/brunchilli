@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { injectGlobal } from 'styled-components';
 import { Route, Switch, withRouter } from 'react-router-dom';
 
-import { FontWieghts } from './base/Fonts';
+import { FontWeights } from './base/Fonts';
 import Colors from './base/Colors';
 
 import Button from './components/Button';
@@ -34,11 +34,11 @@ class App extends Component {
   render() {
     const loginButton = (
       <Fragment>
-        <Button primary={false} color={Colors.black} fontWeight={FontWieghts.light}>
+        <Button primary={false} color={Colors.black} fontWeight={FontWeights.light}>
           Login
         </Button>
 
-        <Button primary={false} color={Colors.black} fontWeight={FontWieghts.light}>
+        <Button primary={false} color={Colors.black} fontWeight={FontWeights.light}>
           Sign up
         </Button>
       </Fragment>

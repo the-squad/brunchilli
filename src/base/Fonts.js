@@ -7,11 +7,11 @@ const FontTypes = {
 };
 
 const Fonts = {
-  primary: 'IBM Plex Sans',
-  secondary: 'Roboto',
+  primary: 'Roboto',
+  secondary: 'IBM Plex Sans',
 };
 
-const FontWieghts = {
+const FontWeights = {
   bold: 700,
   semiBold: 600,
   normal: 500,
@@ -28,4 +28,4 @@ const FontSizes = {
 };
 
 export default FontSizes;
-export { FontWieghts, Fonts, FontSizes, FontTypes };
+export { FontWeights, Fonts, FontSizes, FontTypes };
