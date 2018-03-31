@@ -11,7 +11,15 @@ const Button = styled.button`
   padding: 0 ${props => props.padding};
   font-size: ${props => props.fontSize};
   font-weight: ${props => props.fontWeight};
-  color: ${props => (props.primary ? '#fff' : props.color)};
+  color: ${props => {
+    if (!props.disabled) {
+      if (props.primary) {
+        return '#fff';
+      }
+      return props.color;
+    }
+    return Colors.grey;
+  }};
   background: ${props => {
     if (!props.disabled) {
       if (props.primary) {
@@ -19,7 +27,7 @@ const Button = styled.button`
       }
       return 'transparent';
     }
-    return Colors.grey;
+    return Colors.light;
   }};
   border: 1px solid;
   border-color: ${props => {
@@ -29,7 +37,7 @@ const Button = styled.button`
       }
       return 'transparent';
     }
-    return Colors.grey;
+    return Colors.light;
   }};
   outline: none;
   cursor: ${props => (props.disabled ? 'default' : 'pointer')};
