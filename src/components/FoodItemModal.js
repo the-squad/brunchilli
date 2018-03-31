@@ -8,6 +8,8 @@ import FoodItem from './FoodItem';
 import Text from './Text';
 import Comment from './Comment';
 import Space from './Space';
+import Icon from './Icon';
+import IconLoader from './IconLoader';
 
 import { FontTypes } from '../base/Fonts';
 import Colors from '../base/Colors';
@@ -38,7 +40,7 @@ const ModalContainer = styled.div`
   border-radius: 4px;
   background: ${Colors.white};
   overflow: hidden;
-  pointer-events: none;
+  pointer-events: all;
 `;
 
 const FootItemModalContainer = styled.div`
@@ -59,6 +61,21 @@ const CommentsContainer = styled.div`
   display: grid;
   grid-auto-rows: auto;
   grid-row-gap: ${Spacing.get('4x')};
+`;
+
+const CloseButton = styled.button`
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  position: absolute;
+  right: ${Spacing.get('8x')};
+  top: ${Spacing.get('8x')};
+  cursor: pointer;
 `;
 
 Modal.setAppElement('#root');
@@ -99,12 +116,12 @@ class FoodItemModal extends Component {
     const { isModalOpened, photos, comments } = this.state;
     return (
       <Modal isOpen={isModalOpened} onRequestClose={this.closeModal} style={customStyles}>
-        <Frame onClick={this.closeModal}>
-          <ModalContainer>
+        <Frame>
+          <ModalContainer onClick={e => e.preventDefault()}>
             <PhotosSlider photos={photos} />
 
             <FootItemModalContainer>
-              <FoodItem {...this.state} showAddToCartButton={false} />
+              <FoodItem {...this.state} showAddToCartButton={false} enableFoodNameAction="false" />
               <Space display="block" height={Spacing.get('6x')} />
               <Text type={FontTypes.Heading}>Reviews</Text>
               <Space display="block" height={Spacing.get('4x')} />
@@ -114,6 +131,10 @@ class FoodItemModal extends Component {
               </CommentsContainer>
             </FootItemModalContainer>
           </ModalContainer>
+
+          <CloseButton onClick={this.closeModal}>
+            <Icon icon={IconLoader.getInstance().get('close')} width={13} />
+          </CloseButton>
         </Frame>
       </Modal>
     );
