@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import styled, { injectGlobal } from 'styled-components';
 
-import { Fonts, FontSizes, FontTypes, FontWieghts } from '../base/Fonts';
+import { Fonts, FontSizes, FontTypes, FontWeights } from '../base/Fonts';
 import Colors from '../base/Colors';
 
 /**
@@ -30,13 +30,15 @@ const Base = props => {
 };
 
 Base.propTypes = {
-  fontWeight: PropTypes.oneOf(Object.values(FontWieghts)),
+  fontWeight: PropTypes.oneOf(Object.values(FontWeights)),
   font: PropTypes.oneOf(Object.values(Fonts)),
   color: PropTypes.oneOf(Object.values(Colors)),
   type: PropTypes.oneOf(Object.values(FontTypes)),
   tag: PropTypes.string,
   children: PropTypes.any,
   width: PropTypes.string,
+  textAlign: PropTypes.string,
+  lineHeight: PropTypes.string,
 };
 
 const Text = styled(Base)`
@@ -44,8 +46,10 @@ const Text = styled(Base)`
   font-family: '${props => props.font}';
   font-display: fallback;
   font-size: ${props => FontSizes[props.type]};
+  line-height: ${props => (props.lineHeight ? props.lineHeight : FontSizes[props.type])};
   font-weight: ${props => props.fontWeight};
   user-select: none;
+  text-align: ${props => props.textAlign};
   width: ${props => props.width};
 `;
 
