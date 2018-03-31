@@ -27,6 +27,7 @@ const Comment = ({ photo, name, rate, review }) => (
         <Space width={Spacing.get('2x')} />
         <Rate rate={rate} />
       </CenterVertical>
+      <Space display="block" height={Spacing.get('1x')} />
       <Text color={Colors.grey}>{review}</Text>
     </div>
   </CommentContainer>
