@@ -13,6 +13,8 @@ import { FontTypes } from '../base/Fonts';
 import Colors from '../base/Colors';
 import Spacing from '../base/Spacing';
 
+import keyGenerator from '../KeyGenerator';
+
 const customStyles = {
   overlay: {
     backgroundColor: hexToRgba(Colors.black, 0.75),
@@ -36,10 +38,11 @@ const ModalContainer = styled.div`
   border-radius: 4px;
   background: ${Colors.white};
   overflow: hidden;
+  pointer-events: none;
 `;
 
 const FootItemModalContainer = styled.div`
-  padding: ${Spacing.get('5x')};
+  padding: ${Spacing.get('4x')} ${Spacing.get('6x')} ${Spacing.get('6x')};
 `;
 
 const Frame = styled.div`
@@ -72,7 +75,7 @@ class FoodItemModal extends Component {
     comments: [],
   };
 
-  openModal = ({ photos, name, desc, price, rate, category, comments }) => {
+  openModal = ({ photos, name, desc, price, rate, category, comments, onAddCartClick }) => {
     document.body.style.overflowY = 'hidden';
     this.setState({
       isModalOpened: true,
@@ -83,6 +86,7 @@ class FoodItemModal extends Component {
       rate,
       category,
       comments,
+      onAddCartClick,
     });
   };
 
@@ -95,17 +99,19 @@ class FoodItemModal extends Component {
     const { isModalOpened, photos, comments } = this.state;
     return (
       <Modal isOpen={isModalOpened} onRequestClose={this.closeModal} style={customStyles}>
-        <Frame>
+        <Frame onClick={this.closeModal}>
           <ModalContainer>
             <PhotosSlider photos={photos} />
 
             <FootItemModalContainer>
-              <FoodItem {...this.state} />
+              <FoodItem {...this.state} showAddToCartButton={false} />
               <Space display="block" height={Spacing.get('6x')} />
               <Text type={FontTypes.Heading}>Reviews</Text>
               <Space display="block" height={Spacing.get('4x')} />
 
-              <CommentsContainer>{comments.map(comment => <Comment {...comment} t />)}</CommentsContainer>
+              <CommentsContainer>
+                {comments.map(comment => <Comment key={keyGenerator('com')} {...comment} />)}
+              </CommentsContainer>
             </FootItemModalContainer>
           </ModalContainer>
         </Frame>
