@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { FontTypes, FontWieghts } from '../base/Fonts';
+import { FontTypes, FontWeights } from '../base/Fonts';
 import Center from '../components/Center';
 import Text from '../components/Text';
 import BackgroundImage from '../components/BackgroundImage';
@@ -16,7 +16,7 @@ const HomeContainer = styled.div`
   height: 90vh;
 `;
 
-const AlignLeft = styled.div`
+const AlignRight = styled.div`
   align-items: flex-start;
 `;
 
@@ -40,17 +40,17 @@ class Home extends Component {
         <BackgroundImage />
 
         <Center>
-          <AlignLeft>
-            <Text type={FontTypes.BigTitle} fontWeight={FontWieghts.semiBold} color="#fff">
+          <AlignRight>
+            <Text type={FontTypes.BigTitle} fontWeight={FontWeights.semiBold} color="#fff">
               Lorem Ipsum is simply dummy text
             </Text>
             <br />
-            <Text type={FontTypes.BigTitle} fontWeight={FontWieghts.semiBold} color="#fff">
+            <Text type={FontTypes.BigTitle} fontWeight={FontWeights.semiBold} color="#fff">
               of the printing andtypesetting industry.
             </Text>
             <Space height={Spacing.get('8x')} display="block" />
             <SearchBar onSearch={this.onSearch} />
-          </AlignLeft>
+          </AlignRight>
         </Center>
       </HomeContainer>
     );

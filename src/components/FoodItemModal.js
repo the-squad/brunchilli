@@ -8,10 +8,14 @@ import FoodItem from './FoodItem';
 import Text from './Text';
 import Comment from './Comment';
 import Space from './Space';
+import Icon from './Icon';
+import IconLoader from './IconLoader';
 
 import { FontTypes } from '../base/Fonts';
 import Colors from '../base/Colors';
 import Spacing from '../base/Spacing';
+
+import keyGenerator from '../KeyGenerator';
 
 const customStyles = {
   overlay: {
@@ -36,10 +40,11 @@ const ModalContainer = styled.div`
   border-radius: 4px;
   background: ${Colors.white};
   overflow: hidden;
+  pointer-events: all;
 `;
 
 const FootItemModalContainer = styled.div`
-  padding: ${Spacing.get('5x')};
+  padding: ${Spacing.get('4x')} ${Spacing.get('6x')} ${Spacing.get('6x')};
 `;
 
 const Frame = styled.div`
@@ -58,6 +63,21 @@ const CommentsContainer = styled.div`
   grid-row-gap: ${Spacing.get('4x')};
 `;
 
+const CloseButton = styled.button`
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  position: absolute;
+  right: ${Spacing.get('8x')};
+  top: ${Spacing.get('8x')};
+  cursor: pointer;
+`;
+
 Modal.setAppElement('#root');
 
 class FoodItemModal extends Component {
@@ -72,7 +92,7 @@ class FoodItemModal extends Component {
     comments: [],
   };
 
-  openModal = ({ photos, name, desc, price, rate, category, comments }) => {
+  openModal = ({ photos, name, desc, price, rate, category, comments, onAddCartClick }) => {
     document.body.style.overflowY = 'hidden';
     this.setState({
       isModalOpened: true,
@@ -83,6 +103,7 @@ class FoodItemModal extends Component {
       rate,
       category,
       comments,
+      onAddCartClick,
     });
   };
 
@@ -96,18 +117,24 @@ class FoodItemModal extends Component {
     return (
       <Modal isOpen={isModalOpened} onRequestClose={this.closeModal} style={customStyles}>
         <Frame>
-          <ModalContainer>
+          <ModalContainer onClick={e => e.preventDefault()}>
             <PhotosSlider photos={photos} />
 
             <FootItemModalContainer>
-              <FoodItem {...this.state} />
+              <FoodItem {...this.state} showAddToCartButton={false} enableFoodNameAction="false" />
               <Space display="block" height={Spacing.get('6x')} />
               <Text type={FontTypes.Heading}>Reviews</Text>
               <Space display="block" height={Spacing.get('4x')} />
 
-              <CommentsContainer>{comments.map(comment => <Comment {...comment} t />)}</CommentsContainer>
+              <CommentsContainer>
+                {comments.map(comment => <Comment key={keyGenerator('com')} {...comment} />)}
+              </CommentsContainer>
             </FootItemModalContainer>
           </ModalContainer>
+
+          <CloseButton onClick={this.closeModal}>
+            <Icon icon={IconLoader.getInstance().get('close')} width={13} />
+          </CloseButton>
         </Frame>
       </Modal>
     );

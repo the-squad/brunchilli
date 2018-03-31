@@ -9,6 +9,8 @@ import Space from './Space';
 import Spacing from '../base/Spacing';
 import Colors from '../base/Colors';
 
+import keyGenerator from '../KeyGenerator';
+
 const RatingContainer = styled.div`
   display: flex;
   align-items: center;
@@ -20,7 +22,7 @@ const rating = [1, 2, 3, 4, 5];
 const Rate = props => (
   <RatingContainer>
     {rating.map((_, index) => (
-      <Fragment>
+      <Fragment key={keyGenerator('star')}>
         <Icon
           icon={IconLoader.getInstance().get('star')}
           width={15}

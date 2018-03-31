@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Text from './Text';
 import Space from './Space';
 
-import { FontTypes, FontWieghts } from '../base/Fonts';
+import { FontTypes, FontWeights } from '../base/Fonts';
 import Colors from '../base/Colors';
 import Spacing from '../base/Spacing';
 
@@ -17,11 +17,11 @@ const PriceContainer = styled.div`
 
 const Price = props => (
   <PriceContainer>
-    <Text color={Colors.primary} tag="label" type={FontTypes.BigTitle} fontWeight={FontWieghts.light}>
+    <Text color={props.color} tag="label" type={FontTypes.Title} fontWeight={FontWeights.light}>
       {props.price}
     </Text>
     <Space width={Spacing.get('1x')} />
-    <Text color={Colors.primary} tag="label" type={FontTypes.Body} fontWeight={FontWieghts.light}>
+    <Text color={props.color} tag="label" type={FontTypes.Body} fontWeight={FontWeights.light}>
       L.E
     </Text>
   </PriceContainer>
@@ -29,6 +29,11 @@ const Price = props => (
 
 Price.propTypes = {
   price: PropTypes.number,
+  color: PropTypes.oneOf(Object.values(Colors)),
+};
+
+Price.defaultProps = {
+  color: Colors.primary,
 };
 
 export default Price;

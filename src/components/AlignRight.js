@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-const AlignLeft = styled.div`
+const AlignRight = styled.div`
   justify-content: flex-end;
   display: flex;
 `;
 
-export default AlignLeft;
+export default AlignRight;

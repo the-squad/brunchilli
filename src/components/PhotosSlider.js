@@ -7,6 +7,7 @@ import IconLoader from './IconLoader';
 import Icon from './Icon';
 
 import Spacing from '../base/Spacing';
+import keyGenerator from '../KeyGenerator';
 
 const coverPhotoHeight = '240px';
 
@@ -82,12 +83,16 @@ const PhotosSlider = props => (
     renderBottomCenterControls={({ goToSlide, currentSlide }) => (
       <DotsSlider>
         {props.photos.map((_, index) => (
-          <PageDot isActive={currentSlide === index} onClick={() => goToSlide(index)} />
+          <PageDot
+            key={keyGenerator('dot')}
+            isActive={currentSlide === index}
+            onClick={() => goToSlide(index)}
+          />
         ))}
       </DotsSlider>
     )}
   >
-    {props.photos.map(photo => <CoverPhoto key={photo} src={photo} />)}
+    {props.photos.map(photo => <CoverPhoto key={keyGenerator('pho')} src={photo} />)}
   </Slider>
 );
 

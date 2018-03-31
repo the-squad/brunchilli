@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -14,13 +14,10 @@ const CardContainer = styled.div`
   flex-direction: row;
   background-color: ${Colors.white};
   padding: ${Spacing.get('3x')};
-  cursor: pointer;
   transition: all 200ms ease-in-out;
   box-shadow: none;
-
-  &:hover {
-    box-shadow: 2px 9px 18px -16px rgba(0, 0, 0, 0.75);
-  }
+  height: max-content;
+  border-radius: 4px;
 `;
 
 const Photo = styled.img`
@@ -30,30 +27,22 @@ const Photo = styled.img`
   object-fit: cover;
 `;
 
-class FoodCard extends Component {
-  onCartClick = () => {
-    this.setState(prevProps => ({
-      isAddedToCart: !prevProps.isAddedToCart,
-    }));
-    // TODO: connect to cart class
-  };
+const FoodCard = props => {
+  const { photos, showFoodDetails } = props;
 
-  render() {
-    const { photos, showFoodDetails } = this.props;
-
-    return (
-      <CardContainer>
-        <Photo src={photos[0]} />
-        <Space width={Spacing.get('6x')} />
-        <FoodItem shouldTrimDesc onFoodNameClick={showFoodDetails} {...this.props} />
-      </CardContainer>
-    );
-  }
-}
+  return (
+    <CardContainer>
+      <Photo src={photos[0]} />
+      <Space width={Spacing.get('6x')} />
+      <FoodItem shouldTrimDesc="true" onFoodNameClick={showFoodDetails} {...props} />
+    </CardContainer>
+  );
+};
 
 FoodCard.propTypes = {
   photos: PropTypes.array,
   showFoodDetails: PropTypes.func,
+  onAddToCartClick: PropTypes.func,
 };
 
 FoodCard.defaultProps = {

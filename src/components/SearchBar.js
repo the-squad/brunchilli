@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { FontSizes, FontTypes, FontWieghts } from '../base/Fonts';
+import { FontSizes, FontTypes, FontWeights } from '../base/Fonts';
 import Colors from '../base/Colors';
 import Spacing from '../base/Spacing';
 import Button from '../components/Button';
@@ -62,7 +62,7 @@ class SearchBar extends Component {
         <Button
           padding={Spacing.get('5x')}
           height={46}
-          fontWeight={FontWieghts.light}
+          fontWeight={FontWeights.light}
           fontSize={FontSizes[FontTypes.Title]}
           onClick={this.onSearch}
         >
