@@ -9,6 +9,8 @@ import FoodItemModal from '../components/FoodItemModal';
 import Colors from '../base/Colors';
 import Spacing from '../base/Spacing';
 
+import keyGenerator from '../KeyGenerator';
+
 // TODO: remove this once integrated with the API
 import data from '../fakeData.json';
 
@@ -46,6 +48,8 @@ class Search extends Component {
     this.foodItemModal.openModal(foodDetails);
   };
 
+  addItemToCart = item => this.cart.addToCart(item);
+
   render() {
     return (
       <Fragment>
@@ -58,6 +62,8 @@ class Search extends Component {
           <CardsList>
             {data.data.map(item => (
               <FoodCard
+                key={keyGenerator('food')}
+                id={item.id}
                 photos={item.photos}
                 name={item.name}
                 desc={item.desc}
@@ -66,10 +72,15 @@ class Search extends Component {
                 price={item.price}
                 comments={item.comments}
                 showFoodDetails={this.showFoodItemModal}
+                onAddToCartClick={this.addItemToCart}
               />
             ))}
           </CardsList>
-          <Cart />
+          <Cart
+            ref={cart => {
+              this.cart = cart;
+            }}
+          />
         </SearchGrid>
       </Fragment>
     );
