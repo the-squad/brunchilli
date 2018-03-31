@@ -32,9 +32,19 @@ const ContentContainer = styled.div`
   padding-top: ${Spacing.get('2x')};
 `;
 
+const Name = Text.extend`
+  ${props =>
+    props.enable === 'true' &&
+    `cursor: pointer;
+    &:hover {
+      color: ${Colors.primary};
+    }
+  `};
+`;
+
 const Description = Text.extend`
   ${props =>
-    props.shouldTrim &&
+    props.trim &&
     `overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -53,17 +63,21 @@ class FoodCard extends Component {
   static propTypes = {
     name: PropTypes.string,
     desc: PropTypes.string,
-    price: PropTypes.string,
+    price: PropTypes.number,
     rate: PropTypes.number,
     category: PropTypes.string,
-    shouldTrimDesc: PropTypes.bool,
+    shouldTrimDesc: PropTypes.string,
     onFoodNameClick: PropTypes.func,
     onAddToCartClick: PropTypes.func,
     showAddToCartButton: PropTypes.bool,
+    enableFoodNameAction: PropTypes.string,
   };
 
   static defaultProps = {
     showAddToCartButton: true,
+    enableFoodNameAction: 'true',
+    onFoodNameClick: () => {},
+    onAddToCartClick: () => {},
   };
 
   state = {
@@ -92,7 +106,16 @@ class FoodCard extends Component {
   };
 
   render() {
-    const { name, desc, price, rate, category, shouldTrimDesc, showAddToCartButton } = this.props;
+    const {
+      name,
+      desc,
+      price,
+      rate,
+      category,
+      shouldTrimDesc,
+      showAddToCartButton,
+      enableFoodNameAction,
+    } = this.props;
     const { isAddedToCart } = this.state;
     const addToCartText = isAddedToCart ? 'Added to cart' : 'Add to cart';
     const addToCartIcon = isAddedToCart ? 'success' : 'cart';
@@ -102,14 +125,16 @@ class FoodCard extends Component {
         <ContentContainer>
           <div>
             <CenterVertical>
-              <Text
+              <Name
                 onClick={this.onFoodNameClick}
                 tag="h1"
                 type={FontTypes.Heading}
                 fontWeight={FontWeights.bold}
+                enable={enableFoodNameAction}
+                lineheight="14px"
               >
                 {name}
-              </Text>
+              </Name>
               <Space width={Spacing.get('3x')} />
               <Rate rate={rate} />
             </CenterVertical>
@@ -120,7 +145,7 @@ class FoodCard extends Component {
               type={FontTypes.Body}
               color={Colors.grey}
               fontWeight={FontWeights.light}
-              shouldTrim={shouldTrimDesc}
+              trim={shouldTrimDesc}
             >
               {desc}
             </Description>
