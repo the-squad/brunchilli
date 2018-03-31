@@ -1,11 +1,17 @@
 import React, { Component, Fragment } from 'react';
-// import PropTypes from 'prop-types';
-// import QueryString from 'query-string';
+import PropTypes from 'prop-types';
+import QueryString from 'query-string';
 import styled from 'styled-components';
 
 import FoodCard from '../components/FoodCard';
 import Cart from '../components/Cart';
 import FoodItemModal from '../components/FoodItemModal';
+import SearchBar from '../components/SearchBar';
+import Space from '../components/Space';
+import Text from '../components/Text';
+import Pagination from '../components/Pagination';
+
+import { FontTypes } from '../base/Fonts';
 import Colors from '../base/Colors';
 import Spacing from '../base/Spacing';
 
@@ -30,6 +36,10 @@ const CardsList = styled.div`
 `;
 
 class Search extends Component {
+  static propTypes = {
+    history: PropTypes.any,
+  };
+
   constructor(props) {
     super(props);
 
@@ -37,12 +47,31 @@ class Search extends Component {
 
     this.trash = [1, 2, 3, 4, 5, 6];
     // TODO: parse the search string and call search API
-    // const parsed = QueryString.parse(window.location.pathname);
+    const queryString = QueryString.parse(window.location.search);
+    this.searchQuery = queryString.search;
   }
+
+  state = {
+    searchResults: data.data,
+    isLoadingMore: false,
+    disableLoadMore: true,
+  };
 
   componentDidMount() {
     // TODO: call search API
   }
+
+  onSearch = query => {
+    const queryString = `search=${query}`;
+    this.props.history.push(`/results/?${queryString}`);
+  };
+
+  onLoadMore = () => {
+    // TODO: connect with searchAPI
+    this.setState({
+      isLoadingMore: true,
+    });
+  };
 
   showFoodItemModal = foodDetails => {
     this.foodItemModal.openModal(foodDetails);
@@ -51,6 +80,8 @@ class Search extends Component {
   addItemToCart = item => this.cart.addToCart(item);
 
   render() {
+    const { isLoadingMore, searchResults, disableLoadMore } = this.state;
+
     return (
       <Fragment>
         <FoodItemModal
@@ -59,23 +90,41 @@ class Search extends Component {
           }}
         />
         <SearchGrid>
-          <CardsList>
-            {data.data.map(item => (
-              <FoodCard
-                key={keyGenerator('food')}
-                id={item.id}
-                photos={item.photos}
-                name={item.name}
-                desc={item.desc}
-                category={item.category}
-                rate={item.rate}
-                price={item.price}
-                comments={item.comments}
-                showFoodDetails={this.showFoodItemModal}
-                onAddToCartClick={this.addItemToCart}
-              />
-            ))}
-          </CardsList>
+          <div>
+            <SearchBar small query={this.searchQuery} onSearch={this.onSearch} />
+
+            <Space display="block" height={Spacing.get('4x')} />
+
+            <Text type={FontTypes.Heading} color={Colors.grey}>
+              Search results:
+            </Text>
+
+            <Space display="block" height={Spacing.get('4x')} />
+
+            <Pagination
+              onLoadMore={this.onLoadMore}
+              isLoading={isLoadingMore}
+              disable={disableLoadMore}
+            >
+              <CardsList>
+                {searchResults.map(item => (
+                  <FoodCard
+                    key={keyGenerator('food')}
+                    id={item.id}
+                    photos={item.photos}
+                    name={item.name}
+                    desc={item.desc}
+                    category={item.category}
+                    rate={item.rate}
+                    price={item.price}
+                    comments={item.comments}
+                    showFoodDetails={this.showFoodItemModal}
+                    onAddToCartClick={this.addItemToCart}
+                  />
+                ))}
+              </CardsList>
+            </Pagination>
+          </div>
           <Cart
             ref={cart => {
               this.cart = cart;

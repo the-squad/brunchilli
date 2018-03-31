@@ -43,20 +43,25 @@ class Cart extends Component {
     total: 0,
   };
 
-  addToCart = ({ id, name, price, count = 1, deleteCallback }) => {
+  addToCart = ({ id, name, price, count = 1 }) => {
     this.setState(prevState => {
       const newItems = new Map(prevState.items);
       const alreadyExistedItem = prevState.items.get(id);
 
       if (alreadyExistedItem) {
-        newItems.delete(alreadyExistedItem.id);
+        const newCount = alreadyExistedItem.count + 1;
+        const newTotal = (alreadyExistedItem.price * newCount).toFixed(2);
+        newItems.set(id, {
+          ...alreadyExistedItem,
+          count: newCount,
+          total: parseFloat(newTotal),
+        });
       } else {
         newItems.set(id, {
           id,
           name,
           price,
           count,
-          deleteCallback,
           total: price,
         });
       }
@@ -87,8 +92,6 @@ class Cart extends Component {
   removeFromCart = id => {
     this.setState(prevState => {
       const newItems = prevState.items;
-      const itemToBeDeleted = newItems.get(id);
-      itemToBeDeleted.deleteCallback();
       newItems.delete(id);
 
       return {
@@ -105,6 +108,7 @@ class Cart extends Component {
       const itemTotal = item.count * item.price;
       total += itemTotal;
     });
+    total = parseFloat(total);
 
     return total.toFixed(2);
   };
@@ -142,7 +146,7 @@ class Cart extends Component {
 
         <TotalContainer>
           <Text>Total: </Text>
-          <Price price={total} />
+          <Price price={parseFloat(total)} />
         </TotalContainer>
 
         <Space display="block" height={Spacing.get('6x')} />

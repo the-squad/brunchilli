@@ -80,23 +80,12 @@ class FoodCard extends Component {
     onAddToCartClick: () => {},
   };
 
-  state = {
-    isAddedToCart: false,
-  };
-
   onCartClick = () => {
-    this.setState(
-      prevProps => ({
-        isAddedToCart: !prevProps.isAddedToCart,
-      }),
-      () => {
-        this.props.onAddToCartClick({ ...this.props, deleteCallback: this.removeFromCart });
-      },
-    );
+    this.props.onAddToCartClick({ ...this.props });
   };
 
   onFoodNameClick = () => {
-    this.props.onFoodNameClick({ ...this.props, deleteCallback: this.removeFromCart });
+    this.props.onFoodNameClick({ ...this.props });
   };
 
   removeFromCart = () => {
@@ -116,9 +105,6 @@ class FoodCard extends Component {
       showAddToCartButton,
       enableFoodNameAction,
     } = this.props;
-    const { isAddedToCart } = this.state;
-    const addToCartText = isAddedToCart ? 'Added to cart' : 'Add to cart';
-    const addToCartIcon = isAddedToCart ? 'success' : 'cart';
 
     return (
       <DetailsContainer>
@@ -165,12 +151,12 @@ class FoodCard extends Component {
               <AddToCartButton primary={false} onClick={this.onCartClick}>
                 <CenterVertical>
                   <Icon
-                    icon={IconLoader.getInstance().get(addToCartIcon)}
+                    icon={IconLoader.getInstance().get('cart')}
                     color={Colors.primary}
                     width={15}
                   />
                   <Space width={Spacing.get('2x')} />
-                  {addToCartText}
+                  Add to cart
                 </CenterVertical>
               </AddToCartButton>
             )}
