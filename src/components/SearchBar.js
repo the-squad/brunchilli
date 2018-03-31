@@ -24,14 +24,22 @@ const SearchBarContainer = styled.div`
 const SearchField = styled.input`
   border: none;
   outline: none;
-  font-size: ${FontSizes[FontTypes.Title]};
+  font-size: ${props => (props.small ? FontSizes[FontTypes.Heading] : FontSizes[FontTypes.Title])};
   color: ${Colors.black};
+  display: block;
+  width: 90%;
+`;
+
+const FullWidth = styled.div`
+  width: 100%;
 `;
 
 class SearchBar extends Component {
   static propTypes = {
     onTyping: PropTypes.func,
     onSearch: PropTypes.func,
+    small: PropTypes.bool,
+    query: PropTypes.string,
   };
 
   static defaultProps = {
@@ -39,31 +47,57 @@ class SearchBar extends Component {
     onSearch: () => {},
   };
 
+  state = {
+    query: this.props.query,
+  };
+
   onTyping = e => {
-    this.query = e.target.value;
-    this.props.onTyping(this.query);
+    const query = e.target.value;
+    this.setState(() => {
+      this.props.onTyping(query);
+      return {
+        query,
+      };
+    });
   };
 
   onSearch = () => {
-    this.props.onSearch(this.query);
+    const { query } = this.state;
+    this.props.onSearch(query);
   };
 
   render() {
+    const { small } = this.props;
+    const { query } = this.state;
+    const buttonHeight = small ? 32 : 46;
+    const buttonFontSize = small ? FontSizes[FontTypes.Body] : FontSizes[FontTypes.Title];
+    const buttonPadding = small ? Spacing.get('3x') : Spacing.get('5x');
+    const iconWidth = small ? 16 : 21;
+
     return (
       <SearchBarContainer>
-        <div>
+        <FullWidth>
           <CenterVertical>
             <Space width={Spacing.get('2x')} />
-            <Icon icon={IconLoader.getInstance().get('search')} width={21} color={Colors.grey} />
+            <Icon
+              icon={IconLoader.getInstance().get('search')}
+              width={iconWidth}
+              color={Colors.grey}
+            />
             <Space width={Spacing.get('3x')} />
-            <SearchField placeholder="Try 'Mac & Cheese'" onKeyDown={this.onTyping} />
+            <SearchField
+              small={small}
+              value={query}
+              placeholder="Try 'Mac & Cheese'"
+              onChange={this.onTyping}
+            />
           </CenterVertical>
-        </div>
+        </FullWidth>
         <Button
-          padding={Spacing.get('5x')}
-          height={46}
+          padding={buttonPadding}
+          height={buttonHeight}
           fontWeight={FontWeights.light}
-          fontSize={FontSizes[FontTypes.Title]}
+          fontSize={buttonFontSize}
           onClick={this.onSearch}
         >
           Search
