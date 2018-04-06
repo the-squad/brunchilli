@@ -7,15 +7,6 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     public function Login(Request $request)
     {
@@ -34,7 +25,7 @@ class UserController extends Controller
     public function Register(Request $request)
     {
         $this->validate($request, [
-            "name"=>"required|alpha|min:3|max:15",
+            "name"=>"required|min:3|max:15",
             "email" => "required|email|unique:users,email",
             "password" => "required|min:6|max:50",
             "phone"=>"required|digits:11",
@@ -44,8 +35,8 @@ class UserController extends Controller
         $user = new User();
         $user->fill($request->all());
         if ($user->save())
-            return response('done',200);
+            return response($user,200);
 
-        return response('error',500);
+        return response('Something went wrong',504);
     }
 }
