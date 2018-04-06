@@ -20,5 +20,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('/food','FoodController')->except(["create","edit"]);
 Route::resource('/category','FoodCategoryController')->except(["create","edit"]);
 Route::post('/login','UserController@Login');
+Route::post('/Register','UserController@Register');
+Route::post('/food/comment','FoodController@createComment');
+Route::post('/food/updatecomment','FoodController@updateComment');
+Route::post('/food/deletecomment/','FoodController@deleteComment');
 
 
