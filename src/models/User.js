@@ -22,9 +22,9 @@ class User {
     Cookies.set(USER_ID, this.id);
   };
 
-  isUserExists = () => !!this.userId || Cookies.get(USER_ID);
+  isUserExists = () => !!this.id || Cookies.get(USER_ID);
 
-  getUserId = () => this.id;
+  getUserId = () => this.id || Cookies.get(USER_ID);
 }
 
 export default User;

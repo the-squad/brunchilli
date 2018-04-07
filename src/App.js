@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { injectGlobal } from 'styled-components';
 import { Route, Switch, withRouter } from 'react-router-dom';
+import axios from 'axios';
 
 import Header from './components/Header';
 import IconLoader from './components/IconLoader';
@@ -13,6 +14,8 @@ import SignUp from './views/SignUp';
 
 import icons from './selection.json';
 import User from './models/User';
+
+import Urls from './Urls';
 
 /**
  * Injecting global font family to all HTML nodes
@@ -30,15 +33,29 @@ class App extends Component {
     super(props);
     IconLoader.getInstance().setIconStore(icons);
 
-    const user = new User();
+    this.user = new User();
 
     this.state = {
-      isGettingUser: false, // TODO: replace with user.isUserExits()
+      isGettingUser: this.user.isUserExists(),
     };
   }
 
   componentDidMount() {
-    // TODO: get user data if the user exists
+    if (this.user.isUserExists()) {
+      axios.get(`${Urls.getUser}/${this.user.getUserId()}`).then(response => {
+        this.setState(
+          {
+            isGettingUser: false,
+          },
+          () => {
+            const { name, photo } = response.data;
+
+            this.user.setUser(response.data);
+            this.header.renderUserTabs(response.data);
+          },
+        );
+      });
+    }
   }
 
   getHeaderRef = () => this.header;
