@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import HttpsStatus from 'http-status-codes';
 
-import { INPUT_WIDTH } from './Constants';
+import { INPUT_WIDTH, ICON_WIDTH } from './Constants';
 import UserPortal from './UserPortal';
 
 import IconLoader from '../components/IconLoader';
@@ -16,21 +17,48 @@ import Validation from '../base/ValidationRegex';
 import Spacing from '../base/Spacing';
 import Colors from '../base/Colors';
 
+import validateFields from '../utils/ValidateFields';
 import Urls from '../Urls';
 
 class Login extends Component {
+  constructor(props) {
+    super(props);
+
+    this.inputRefs = new Map();
+  }
+
   state = {
     email: undefined,
     password: undefined,
+    isLoggingIn: false,
   };
 
   onLogin = () => {
-    // this.userPortal.onSuccess();
-    const loginBody = this.state;
-    axios.post(Urls.login, loginBody).then(response => {
-      // if (response.status === STATUS_CODES)
-      this.userPortal.onSuccess(response.data);
-    });
+    const inputs = Array.from(this.inputRefs.values());
+    const isAllValid = validateFields(inputs);
+
+    if (isAllValid) {
+      this.setState(
+        {
+          isLoggingIn: true,
+        },
+        () => {
+          const loginBody = this.state;
+          axios
+            .post(Urls.login, loginBody)
+            .then(response => {
+              if (response.status === HttpsStatus.OK) {
+                this.userPortal.onSuccess(response.data);
+              }
+            })
+            .catch(() => {
+              this.setState({
+                isLoggingIn: false,
+              });
+            });
+        },
+      );
+    }
   };
 
   updateInfo = (value, key) => {
@@ -39,8 +67,12 @@ class Login extends Component {
     });
   };
 
+  addRef = (ref, name) => {
+    this.inputRefs.set(name, ref);
+  };
+
   render() {
-    const { email, password } = this.state;
+    const { email, password, isLoggingIn } = this.state;
     return (
       <UserPortal
         ref={userPortal => {
@@ -63,7 +95,7 @@ class Login extends Component {
         <Space display="block" height={Spacing.get('10x')} />
         <InputField
           icon={IconLoader.getInstance().get('email')}
-          iconWidth={15}
+          iconWidth={ICON_WIDTH}
           placeholder="Email"
           regexArray={Validation.email}
           onChange={this.updateInfo}
@@ -71,11 +103,14 @@ class Login extends Component {
           isRequired
           callbackParams="email"
           width={INPUT_WIDTH}
+          ref={emailField => {
+            this.addRef(emailField, 'email');
+          }}
         />
         <Space display="block" height={Spacing.get('2x')} />
         <InputField
           icon={IconLoader.getInstance().get('password')}
-          iconWidth={15}
+          iconWidth={ICON_WIDTH}
           placeholder="Password"
           regexArray={Validation.password}
           onChange={this.updateInfo}
@@ -84,10 +119,15 @@ class Login extends Component {
           type="password"
           callbackParams="password"
           width={INPUT_WIDTH}
+          ref={passwordField => {
+            this.addRef(passwordField, 'password');
+          }}
         />
         <Space display="block" height={Spacing.get('2x')} />
         <AlignRight>
-          <Button onClick={this.onLogin}>Login</Button>
+          <Button disabled={isLoggingIn} onClick={this.onLogin}>
+            Login
+          </Button>
         </AlignRight>
       </UserPortal>
     );
