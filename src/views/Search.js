@@ -128,6 +128,7 @@ class Search extends Component {
             ref={cart => {
               this.cart = cart;
             }}
+            {...this.props}
           />
         </SearchGrid>
       </Fragment>
