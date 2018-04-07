@@ -1,4 +1,4 @@
 const INPUT_WIDTH = '450px';
-const GRID_LAYOUT = undefined;
+const ICON_WIDTH = 17;
 
-export { INPUT_WIDTH, GRID_LAYOUT };
+export { INPUT_WIDTH, ICON_WIDTH };
