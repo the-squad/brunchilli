@@ -37,7 +37,7 @@ const CardsList = styled.div`
 
 class Search extends Component {
   static propTypes = {
-    history: PropTypes.any,
+    history: PropTypes.object,
   };
 
   constructor(props) {
@@ -45,7 +45,6 @@ class Search extends Component {
 
     document.body.style.background = Colors.light;
 
-    this.trash = [1, 2, 3, 4, 5, 6];
     // TODO: parse the search string and call search API
     const queryString = QueryString.parse(window.location.search);
     this.searchQuery = queryString.search;
