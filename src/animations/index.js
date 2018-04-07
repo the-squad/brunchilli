@@ -25,3 +25,37 @@ export const spin = keyframes`
 export const rotate = keyframes`
   100% { transform: rotate(360deg); }
 `;
+
+export const indeterminate = keyframes`
+  0% {
+    left: -35%;
+    right: 100%;
+  }
+
+  60% {
+    left: 100%;
+    right: -90%;
+  }
+
+  100% {
+    left: 100%;
+    right: -90%;
+  }
+`;
+
+export const indeterminateShort = keyframes`
+  0% {
+    left: -200%;
+    right: 100%;
+  }
+
+  60% {
+    left: 107%;
+    right: -8%;
+  }
+
+  100% {
+    left: 107%;
+    right: -8%;
+  }
+`;
