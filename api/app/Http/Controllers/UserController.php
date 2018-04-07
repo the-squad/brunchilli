@@ -10,6 +10,11 @@ use Intervention\Image\Facades\Image;
 class UserController extends Controller
 {
 
+    public function getUser(User $user)
+    {
+        return response(new UserResource($user), 200);
+    }
+    
     public function Login(Request $request)
     {
         $this->validate($request, [
