@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\User;
-use Faker\Provider\Image;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -18,9 +19,9 @@ class UserController extends Controller
 
         $user = User::where('email', '=', $request->email)->get()->first();
         if ($user->password != $request->password) {
-            return response('errr pass', 500);
+            return response('', 500);
         }
-        return $user;
+        return response(new UserResource($user), 200);
     }
 
     public function Register(Request $request)
@@ -36,18 +37,18 @@ class UserController extends Controller
         \DB::beginTransaction();
         $user = new User();
         $user->fill($request->all());
+        if ($request->photo) {
+            $photo = $request->photo;
+            $png_url = "/img/" . time() . ".png";
+            $path = public_path() . "/storage" . $png_url;
+            $data = explode(',', $photo)[1];
+            $data = base64_decode($data);
+            Image::make($data)->resize(500, 500)->save($path);
+            $user->photo = $png_url;
+        }
         if ($user->save()) {
-            if ($request->photo) {
-                $photo = $request->photo;
-                $png_url = "/img/" . time() . ".png";
-                $path = public_path() . "/storage" . $png_url;
-                $data = explode(',', $photo)[1];
-                $data = base64_decode($data);
-                Image::make($data)->resize(500, 500)->save($path);
-                $user->photo = $png_url;
-            }
             \DB::commit();
-            return response($user, 200);
+            return response(new UserResource($user), 200);
         }
         \DB::rollBack();
         return response('Something went wrong', 504);
