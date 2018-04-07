@@ -1,18 +1,18 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { injectGlobal } from 'styled-components';
 import { Route, Switch, withRouter } from 'react-router-dom';
 
-import { FontWeights } from './base/Fonts';
-import Colors from './base/Colors';
-
-import Button from './components/Button';
 import Header from './components/Header';
 import IconLoader from './components/IconLoader';
+import Splash from './components/Splash';
 
 import Home from './views/Home';
 import Search from './views/Search';
+import Login from './views/Login';
+import SignUp from './views/SignUp';
 
 import icons from './selection.json';
+import User from './models/User';
 
 /**
  * Injecting global font family to all HTML nodes
@@ -29,28 +29,47 @@ class App extends Component {
   constructor(props) {
     super(props);
     IconLoader.getInstance().setIconStore(icons);
+
+    const user = new User();
+
+    this.state = {
+      isGettingUser: false, // TODO: replace with user.isUserExits()
+    };
   }
 
-  render() {
-    const loginButton = (
-      <Fragment>
-        <Button primary={false} color={Colors.black} fontWeight={FontWeights.light}>
-          Login
-        </Button>
+  componentDidMount() {
+    // TODO: get user data if the user exists
+  }
 
-        <Button primary={false} color={Colors.black} fontWeight={FontWeights.light}>
-          Sign up
-        </Button>
-      </Fragment>
-    );
+  getHeaderRef = () => this.header;
+
+  render() {
+    const { isGettingUser } = this.state;
+
+    if (isGettingUser) {
+      return <Splash />;
+    }
 
     return (
       <div className="App">
-        <Header items={loginButton} />
+        <Header
+          ref={header => {
+            this.header = header;
+          }}
+          {...this.props}
+        />
 
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/results" component={Search} />
+          <Route
+            path="/login"
+            component={() => <Login {...this.props} getHeaderRef={this.getHeaderRef} />}
+          />
+          <Route
+            path="/register"
+            component={() => <SignUp {...this.props} getHeaderRef={this.getHeaderRef} />}
+          />
         </Switch>
       </div>
     );

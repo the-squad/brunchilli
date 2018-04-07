@@ -9,9 +9,9 @@ const HiddenImage = styled.img`
 injectGlobal`
   body {
     height: 100vh;
-    background-position: 0% 0%;
+    background-position: center;
     background-repeat: no-repeat;
-    background-size: 125%;
+    background-size: cover !important;
     transition: background-image 0.3s linear;
   }
 `;

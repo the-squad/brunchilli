@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import Icon from './Icon';
@@ -15,6 +16,9 @@ import Spacing from '../base/Spacing';
 import Colors from '../base/Colors';
 import keyGenerator from '../KeyGenerator';
 import Price from './Price';
+
+import User from '../models/User';
+import CartModel from '../models/Cart';
 
 const CartContainer = styled.div`
   padding: ${Spacing.get('6x')};
@@ -38,9 +42,29 @@ const TotalContainer = styled.div`
 `;
 
 class Cart extends Component {
-  state = {
-    items: new Map(),
-    total: 0,
+  static propTypes = {
+    history: PropTypes.object,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.cart = new CartModel();
+
+    this.state = {
+      items: this.cart.getCart() || new Map(),
+      total: this.calculateTotal(this.cart.getCart()) || 0,
+    };
+  }
+
+  onCheckout = () => {
+    const user = new User();
+    this.cart.setCart(this.state.items);
+    if (user.isUserExists()) {
+      // TODO: checkout
+    } else {
+      this.props.history.push('/login?callbackUrl=results');
+    }
   };
 
   addToCart = ({ id, name, price, count = 1 }) => {
@@ -151,7 +175,7 @@ class Cart extends Component {
 
         <Space display="block" height={Spacing.get('6x')} />
 
-        <Button width="100%" disabled={items.size === 0}>
+        <Button width="100%" disabled={items.size === 0} onClick={this.onCheckout}>
           Checkout
         </Button>
       </CartContainer>
