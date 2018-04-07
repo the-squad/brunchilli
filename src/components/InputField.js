@@ -162,7 +162,6 @@ class InputField extends Component {
   };
 
   showErrorMessage = errorMessage => {
-    console.log(errorMessage);
     this.setState(() => ({
       errorMessage,
       color: Colors.danger,
