@@ -8,7 +8,7 @@ import Colors from '../base/Colors';
 
 import Image from '../assets/illustration.png';
 
-import User from '../modals/User';
+import User from '../models/User';
 
 const INPUT_WIDTH = '450px';
 
@@ -35,17 +35,9 @@ class UserPortal extends Component {
   }
 
   onSuccess = ({ id, name, phone, email, photo, address }) => {
-    const user = User.getInstance();
-    user.userId = id;
-    user.name = name;
-    user.phone = phone;
-    user.email = email;
-    user.photo = photo;
-    user.address = address;
-
+    const user = new User();
+    user.setUser({ id, name, phone, email, photo, address });
     this.props.getHeaderRef().renderUserTabs({ name, photo });
-
-    // console.log(User);
     const queryString = QueryString.parse(window.location.search);
     this.props.history.push(queryString.callbackUrl);
   };
