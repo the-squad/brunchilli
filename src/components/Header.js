@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import QueryString from 'query-string';
 
 import Text from './Text';
 import CirclePhoto from './CirclePhoto';
@@ -10,6 +11,8 @@ import Spacing from '../base/Spacing';
 import Colors from '../base/Colors';
 import { FontWeights } from '../base/Fonts';
 import logo from '../logo.svg';
+import CenterVertical from './CenterVertical';
+import Space from './Space';
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -32,11 +35,21 @@ class Header extends Component {
   };
 
   getUserItems = ({ name, photo }) => (
-    <Fragment>
+    <CenterVertical>
       <Text>{name}</Text>
-      <CirclePhoto src={photo} />
-    </Fragment>
+      <Space width={Spacing.get('5x')} />
+      <CirclePhoto radius={35} src={photo} />
+    </CenterVertical>
   );
+
+  setCallbackUrl = () => {
+    const queryString = QueryString.parse(window.location.search);
+    let { callbackUrl } = queryString;
+    if (!callbackUrl) {
+      callbackUrl = '/';
+    }
+    return callbackUrl;
+  };
 
   getDefaultItems = () => (
     <Fragment>
@@ -44,12 +57,15 @@ class Header extends Component {
         primary={false}
         color={Colors.black}
         fontWeight={FontWeights.light}
-        onClick={() => this.gotTo('/register')}
+        onClick={() => this.gotTo(`/register?callbackUrl=${this.setCallbackUrl()}`)}
       >
         Sign up
       </Button>
 
-      <Button fontWeight={FontWeights.light} onClick={() => this.gotTo('/login')}>
+      <Button
+        fontWeight={FontWeights.light}
+        onClick={() => this.gotTo(`/login?callbackUrl=${this.setCallbackUrl()}`)}
+      >
         Login
       </Button>
     </Fragment>
@@ -80,7 +96,13 @@ class Header extends Component {
     return (
       <HeaderContainer>
         <div>
-          <img height="20px" src={logo} alt="logo" />
+          <img
+            height="20px"
+            src={logo}
+            alt="logo"
+            onClick={() => this.gotTo('/')}
+            onKeyDown={() => {}}
+          />
         </div>
 
         <div>{leftItems}</div>
