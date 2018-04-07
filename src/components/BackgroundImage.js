@@ -11,7 +11,7 @@ injectGlobal`
     height: 100vh;
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover !important;
     transition: background-image 0.3s linear;
   }
 `;
