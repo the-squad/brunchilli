@@ -44,7 +44,7 @@ class Home extends Component {
             <Text type={FontTypes.BigTitle} fontWeight={FontWeights.semiBold} color="#fff">
               Lorem Ipsum is simply dummy text
             </Text>
-            <br />
+            <Space height={Spacing.get('2x')} display="block" />
             <Text type={FontTypes.BigTitle} fontWeight={FontWeights.semiBold} color="#fff">
               of the printing andtypesetting industry.
             </Text>
