@@ -19,8 +19,8 @@ class FoodController extends Controller
     public function index(Request $request)
     {
         $text = $request->get('query');
-        return FoodResource::collection(Food::with(['photos','category','comments.user'])->when($text, function ($query) use ($text) {
-            return $query->where('name' , 'like' , '%'.$text.'%');
+        return FoodResource::collection(Food::with(['photos', 'category', 'comments.user'])->when($text, function ($query) use ($text) {
+            return $query->where('name', 'like', '%' . $text . '%');
         })->get());
     }
 
@@ -114,24 +114,25 @@ class FoodController extends Controller
     }
 
 
-    public function updateComment(Request $request)
+    public function updateComment(Request $request , Comment $comment)
     {
         $this->validate($request, [
             "review" => "required|min:3|max:50",
         ]);
-
-        $comment = Comment::find($request->id);
         $comment->fill($request->all());
         if ($comment->save())
             return response('done', 200);
         return response('error', 500);
     }
 
-    public function deleteComment(Request $request)
+    public function deleteComment(Comment $comment)
     {
-        $comment = Comment::find($request->id);
-        if ($comment->delete())
-            return response('done', 200);
+        try {
+            if ($comment->delete())
+                return response('', 200);
+        } catch (\Exception $exception) {
+            return response('error', 500);
+        }
         return response('error', 500);
     }
 

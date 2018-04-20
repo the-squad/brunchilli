@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     protected $fillable = [
-        'review','food_id','user_id'
+        'review','food_id','user_id','rate'
     ];
     public function food()
     {

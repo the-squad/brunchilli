@@ -18,7 +18,7 @@ class FoodResource extends JsonResource
             "id" => $this->id,
             "name" => $this->name,
             "desc" =>$this->description,
-            "photos" => PhotoResource::collection($this->photos),   
+            "photos" => PhotoResource::collection($this->photos),
             "price" => $this->price,
             "rate" => $this->rate,
             "category" => $this->category->name,
