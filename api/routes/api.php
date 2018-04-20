@@ -19,8 +19,8 @@ Route::group(['middleware' => 'cors'],function (){
     Route::post('/register','UserController@Register');
     Route::get('/user/{user}','UserController@getUser');
     Route::post('/food/comment','FoodController@createComment');
-    Route::post('/food/updatecomment','FoodController@updateComment');
-    Route::post('/food/deletecomment/','FoodController@deleteComment');
+    Route::put('/food/comment','FoodController@updateComment');
+    Route::delete('/food/comment/{comment}','FoodController@deleteComment');
 });
 
 
