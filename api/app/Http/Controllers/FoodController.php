@@ -16,21 +16,24 @@ class FoodController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return FoodResource::collection(Food::all());
+        $text = $request->get('query');
+        return FoodResource::collection(Food::with(['photos','category','comments.user'])->when($text, function ($query) use ($text) {
+            return $query->where('name' , 'like' , '%'.$text.'%');
+        })->get());
     }
 
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             "name" => "required|min:3|max:50",
             "description" => "required|min:2|max:200",
             "price" => "required|numeric",
@@ -44,16 +47,16 @@ class FoodController extends Controller
         $food = new Food();
         $food->fill($request->all());
         $food->save();
-        foreach ($request->img as $photo){
-            $png_url = "/img/".time()."_".$i.".png";
-            $path = public_path()."/storage". $png_url;
-            $data = explode(',',$photo)[1];
+        foreach ($request->img as $photo) {
+            $png_url = "/img/" . time() . "_" . $i . ".png";
+            $path = public_path() . "/storage" . $png_url;
+            $data = explode(',', $photo)[1];
             $data = base64_decode($data);
-            Image::make($data)->resize(500,500)->save($path);
+            Image::make($data)->resize(500, 500)->save($path);
             $img = new Photo();
             $img->path = $png_url;
             $img->food_id = $food->id;
-            if(!$img->save())
+            if (!$img->save())
                 \DB::rollBack();
             $i++;
         }
@@ -63,7 +66,7 @@ class FoodController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Food  $food
+     * @param  \App\Food $food
      * @return \Illuminate\Http\Response
      */
     public function show(Food $food)
@@ -74,8 +77,8 @@ class FoodController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Food  $food
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Food $food
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Food $food)
@@ -86,7 +89,7 @@ class FoodController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Food  $food
+     * @param  \App\Food $food
      * @return \Illuminate\Http\Response
      */
     public function destroy(Food $food)
@@ -97,39 +100,39 @@ class FoodController extends Controller
     public function createComment(Request $request)
     {
         $this->validate($request, [
-            "comment"=>"required|min:3|max:50",
-            "user_id"=>"required|exists:users,id",
-            "food_id"=>"required|exists:foods,id"
+            "review" => "required|min:3|max:50",
+            "user_id" => "required|exists:users,id",
+            "food_id" => "required|exists:foods,id"
 
         ]);
         $comment = new Comment();
         $comment->fill($request->all());
         if ($comment->save())
-            return response('done',200);
+            return response('done', 200);
 
-        return response('error',500);
+        return response('error', 500);
     }
 
 
     public function updateComment(Request $request)
     {
-        $this->validate($request,[
-            "comment" => "required|min:3|max:50",
+        $this->validate($request, [
+            "review" => "required|min:3|max:50",
         ]);
 
         $comment = Comment::find($request->id);
         $comment->fill($request->all());
         if ($comment->save())
-            return response('done',200);
-        return response('error',500);
+            return response('done', 200);
+        return response('error', 500);
     }
 
     public function deleteComment(Request $request)
     {
         $comment = Comment::find($request->id);
         if ($comment->delete())
-            return response('done',200);
-        return response('error',500);
+            return response('done', 200);
+        return response('error', 500);
     }
 
 }

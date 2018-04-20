@@ -26,4 +26,9 @@ class Photo extends Model
     {
         return $this->belongsTo(Food::class);
     }
+
+    public function getPathAttribute($value)
+    {
+        return asset("/storage".$value);
+    }
 }
