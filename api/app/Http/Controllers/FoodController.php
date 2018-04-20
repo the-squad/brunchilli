@@ -21,7 +21,7 @@ class FoodController extends Controller
         $text = $request->get('query');
         return FoodResource::collection(Food::with(['photos', 'category', 'comments.user'])->when($text, function ($query) use ($text) {
             return $query->where('name', 'like', '%' . $text . '%');
-        })->get());
+        })->paginate(10));
     }
 
 
