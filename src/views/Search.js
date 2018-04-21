@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import QueryString from 'query-string';
 import styled from 'styled-components';
+import Axios from 'axios';
 
 import FoodCard from '../components/FoodCard';
 import Cart from '../components/Cart';
@@ -16,9 +17,7 @@ import Colors from '../base/Colors';
 import Spacing from '../base/Spacing';
 
 import keyGenerator from '../KeyGenerator';
-
-// TODO: remove this once integrated with the API
-import data from '../fakeData.json';
+import Urls from '../Urls';
 
 const SearchGrid = styled.div`
   display: grid;
@@ -45,30 +44,41 @@ class Search extends Component {
 
     document.body.style.background = Colors.light;
 
-    // TODO: parse the search string and call search API
     const queryString = QueryString.parse(window.location.search);
     this.searchQuery = queryString.search;
   }
 
   state = {
-    searchResults: data.data,
+    searchResults: [],
     isLoadingMore: false,
     disableLoadMore: true,
   };
 
   componentDidMount() {
-    // TODO: call search API
+    this.search();
   }
 
   onSearch = query => {
     const queryString = `search=${query}`;
     this.props.history.push(`/results/?${queryString}`);
+
+    this.search();
   };
 
   onLoadMore = () => {
     // TODO: connect with searchAPI
     this.setState({
       isLoadingMore: true,
+    });
+  };
+
+  search = () => {
+    const queryString = QueryString.parse(window.location.search);
+    const searchQuery = queryString.search;
+    Axios.get(`${Urls.search}?query=${searchQuery}`).then(response => {
+      this.setState({
+        searchResults: response.data.data,
+      });
     });
   };
 
