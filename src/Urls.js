@@ -6,6 +6,8 @@ const urls = {
   login: `${baseUrl}/api/login`,
   register: `${baseUrl}/api/register`,
   getUser: `${baseUrl}/api/user`,
+  search: `${baseUrl}/api/food`,
+  addComment: `${baseUrl}/api/food/comment`,
 };
 
 export default urls;
