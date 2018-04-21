@@ -13,7 +13,7 @@ import Colors from '../base/Colors';
 
 const CommentContainer = styled.div`
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 40px auto;
   grid-column-gap: ${Spacing.get('3x')};
 `;
 
