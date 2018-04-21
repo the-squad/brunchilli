@@ -48,8 +48,6 @@ class App extends Component {
             isGettingUser: false,
           },
           () => {
-            const { name, photo } = response.data;
-
             this.user.setUser(response.data);
             this.header.renderUserTabs(response.data);
           },

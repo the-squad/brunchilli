@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -17,25 +17,52 @@ const RatingContainer = styled.div`
   flex-direction: row;
 `;
 
+const IconContainer = styled.div`
+  cursor: ${props => (props.editable ? 'pointer' : 'default')};
+`;
+
 const rating = [1, 2, 3, 4, 5];
 
-const Rate = props => (
-  <RatingContainer>
-    {rating.map((_, index) => (
-      <Fragment key={keyGenerator('star')}>
-        <Icon
-          icon={IconLoader.getInstance().get('star')}
-          width={15}
-          color={index < props.rate ? Colors.warning : Colors.grey}
-        />
-        <Space width={Spacing.get('1x')} />
-      </Fragment>
-    ))}
-  </RatingContainer>
-);
+class Rate extends PureComponent {
+  static propTypes = {
+    rate: PropTypes.number,
+    editable: PropTypes.bool,
+    onChange: PropTypes.func,
+    callbackParams: PropTypes.any,
+  };
 
-Rate.propTypes = {
-  rate: PropTypes.number,
-};
+  static defaultProps = {
+    editable: false,
+    onChange: () => {},
+  };
+
+  setRate = rate => {
+    const { editable, onChange, callbackParams } = this.props;
+    if (!editable) return;
+    onChange(rate + 1, callbackParams);
+  };
+
+  render() {
+    const { rate, editable } = this.props;
+
+    return (
+      <RatingContainer>
+        {rating.map((_, index) => (
+          <Fragment key={keyGenerator('star')}>
+            <IconContainer editable={editable}>
+              <Icon
+                icon={IconLoader.getInstance().get('star')}
+                width={15}
+                color={index < rate ? Colors.warning : Colors.grey}
+                onClick={() => this.setRate(index)}
+              />
+            </IconContainer>
+            <Space width={Spacing.get('1x')} />
+          </Fragment>
+        ))}
+      </RatingContainer>
+    );
+  }
+}
 
 export default Rate;

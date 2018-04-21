@@ -22,6 +22,15 @@ class User {
     Cookies.set(USER_ID, this.id);
   };
 
+  getUser = () => ({
+    id: this.id,
+    name: this.name,
+    photo: this.photo,
+    email: this.email,
+    phone: this.phone,
+    address: this.address,
+  });
+
   isUserExists = () => !!this.id || Cookies.get(USER_ID);
 
   getUserId = () => this.id || Cookies.get(USER_ID);
