@@ -16,6 +16,8 @@ import Colors from '../base/Colors';
 import Spacing from '../base/Spacing';
 
 import keyGenerator from '../KeyGenerator';
+import User from '../models/User';
+import Review from './Review';
 
 const customStyles = {
   overlay: {
@@ -81,6 +83,12 @@ const CloseButton = styled.button`
 Modal.setAppElement('#root');
 
 class FoodItemModal extends Component {
+  constructor(props) {
+    super(props);
+
+    this.user = new User();
+  }
+
   state = {
     isModalOpened: false,
     photos: [],
@@ -92,11 +100,13 @@ class FoodItemModal extends Component {
     comments: [],
   };
 
-  openModal = ({ photos, name, desc, price, rate, category, comments, onAddCartClick }) => {
+  openModal = ({ photos, id, name, desc, price, rate, category, comments, onAddCartClick }) => {
     document.body.style.overflowY = 'hidden';
+    console.log(id);
     this.setState({
       isModalOpened: true,
       photos,
+      foodId: id,
       name,
       desc,
       price,
@@ -112,8 +122,25 @@ class FoodItemModal extends Component {
     this.setState({ isModalOpened: false });
   };
 
+  addStaticReview = ({ userPhoto, userName, comment, rate }) => {
+    this.setState(prevState => {
+      const newComments = prevState.comments;
+      newComments.unshift({
+        photo: userPhoto,
+        name: userName,
+        rate,
+        review: comment,
+      });
+
+      return newComments;
+    });
+  };
+
   render() {
-    const { isModalOpened, photos, comments } = this.state;
+    const { isModalOpened, photos, comments, foodId } = this.state;
+    const isUserExists = this.user.isUserExists();
+    const { photo, id, name } = this.user.getUser();
+
     return (
       <Modal isOpen={isModalOpened} onRequestClose={this.closeModal} style={customStyles}>
         <Frame>
@@ -127,6 +154,15 @@ class FoodItemModal extends Component {
               <Space display="block" height={Spacing.get('4x')} />
 
               <CommentsContainer>
+                {isUserExists && (
+                  <Review
+                    userPhoto={photo}
+                    onReview={this.addStaticReview}
+                    userId={id}
+                    userName={name}
+                    foodId={foodId}
+                  />
+                )}
                 {comments.map(comment => <Comment key={keyGenerator('com')} {...comment} />)}
               </CommentsContainer>
             </FootItemModalContainer>
