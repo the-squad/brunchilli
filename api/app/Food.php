@@ -29,7 +29,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Food extends Model
 {
-    protected $fillable = ['name','description','price','rate','category_id'];
+    protected $fillable = ['name','description','price','category_id'];
 
     public function photos()
     {
@@ -48,5 +48,13 @@ class Food extends Model
     public function category()
     {
         return $this->belongsTo(FoodCategory::class,'category_id');
+    }
+
+    public function getRate()
+    {
+        $rate = 0;
+        foreach ($this->comments as $comment)
+            $rate += $comment->rate;
+        return $this->comments->count() == 0 ? 0 : ceil($rate/$this->comments->count());
     }
 }

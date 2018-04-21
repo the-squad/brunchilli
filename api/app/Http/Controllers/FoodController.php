@@ -37,7 +37,6 @@ class FoodController extends Controller
             "name" => "required|min:3|max:50",
             "description" => "required|min:2|max:200",
             "price" => "required|numeric",
-            "rate" => "required|numeric",
             "category_id" => "required|exists:food_categories,id",
             "img" => "required|array|min:1|max:5",
             "img.*" => "required"
@@ -100,15 +99,14 @@ class FoodController extends Controller
     public function createComment(Request $request)
     {
         $this->validate($request, [
-            "review" => "required|min:3|max:50",
+            "review" => "nullable|min:3|max:50",
             "user_id" => "required|exists:users,id",
             "food_id" => "required|exists:foods,id"
-
         ]);
         $comment = new Comment();
         $comment->fill($request->all());
         if ($comment->save())
-            return response('done', 200);
+            return response('', 200);
 
         return response('error', 500);
     }
@@ -117,11 +115,11 @@ class FoodController extends Controller
     public function updateComment(Request $request , Comment $comment)
     {
         $this->validate($request, [
-            "review" => "required|min:3|max:50",
+            "review" => "nullable|min:3|max:50",
         ]);
         $comment->fill($request->all());
         if ($comment->save())
-            return response('done', 200);
+            return response('', 200);
         return response('error', 500);
     }
 
