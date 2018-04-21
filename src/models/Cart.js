@@ -15,6 +15,18 @@ class Cart {
 
   getCart = () => this.cart;
 
+  getCartTotal = () => {
+    let total = 0;
+    const itemsArray = Array.from(this.cart.values());
+    itemsArray.forEach(item => {
+      const itemTotal = item.count * item.price;
+      total += itemTotal;
+    });
+    total = parseFloat(total);
+
+    return total.toFixed(2);
+  };
+
   isNotEmpty = () => this.cart.size() !== 0;
 }
 
