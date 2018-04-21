@@ -21,23 +21,23 @@ const Button = styled.button`
     return Colors.grey;
   }};
   background: ${props => {
-    if (!props.disabled) {
-      if (props.primary) {
+    if (props.primary) {
+      if (!props.disabled) {
         return props.color;
       }
-      return 'transparent';
+      return Colors.light;
     }
-    return Colors.light;
+    return 'transparent';
   }};
-  border: 1px solid;
+  border: ${props => props.primary && '1px solid'};
   border-color: ${props => {
-    if (!props.disabled) {
-      if (props.primary) {
+    if (props.primary) {
+      if (!props.disabled) {
         return props.color;
       }
-      return 'transparent';
+      return Colors.light;
     }
-    return Colors.light;
+    return 'transparent';
   }};
   outline: none;
   cursor: ${props => (props.disabled ? 'default' : 'pointer')};
