@@ -12,6 +12,8 @@ import Search from './views/Search';
 import Confirmation from './views/Confirmation';
 import Login from './views/Login';
 import SignUp from './views/SignUp';
+import FoodMenu from './views/FoodMenu';
+import CategoriesList from './views/CategoriesList';
 
 import icons from './selection.json';
 import User from './models/User';
@@ -79,6 +81,8 @@ class App extends Component {
           <Route path="/" exact component={Home} />
           <Route path="/results" component={Search} />
           <Route path="/confirmation" component={Confirmation} />
+          <Route path="/menu" component={FoodMenu} />
+          <Route path="/categories" component={CategoriesList} />
           <Route
             path="/login"
             component={() => <Login {...this.props} getHeaderRef={this.getHeaderRef} />}
