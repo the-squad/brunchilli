@@ -8,6 +8,10 @@ const urls = {
   getUser: `${baseUrl}/api/user`,
   search: `${baseUrl}/api/food`,
   addComment: `${baseUrl}/api/food/comment`,
+  getCategories: `${baseUrl}/api/category`,
+  editCategory: `${baseUrl}/api/category`,
+  deleteCategory: `${baseUrl}/api/category`,
+  addCategory: `${baseUrl}/api/category`,
 };
 
 export default urls;

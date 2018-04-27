@@ -62,6 +62,7 @@ class Cart extends Component {
     this.cart.setCart(this.state.items);
     if (user.isUserExists()) {
       // TODO: checkout
+      this.props.history.push('/confirmation');
     } else {
       this.props.history.push('/login?callbackUrl=results');
     }

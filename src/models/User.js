@@ -22,6 +22,11 @@ class User {
     Cookies.set(USER_ID, this.id);
   };
 
+  logOut = () => {
+    Cookies.remove(USER_ID);
+    window.location.reload();
+  };
+
   getUser = () => ({
     id: this.id,
     name: this.name,

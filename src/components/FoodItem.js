@@ -71,6 +71,7 @@ class FoodCard extends Component {
     onAddToCartClick: PropTypes.func,
     showAddToCartButton: PropTypes.bool,
     enableFoodNameAction: PropTypes.string,
+    customButtons: PropTypes.any,
   };
 
   static defaultProps = {
@@ -104,6 +105,7 @@ class FoodCard extends Component {
       shouldTrimDesc,
       showAddToCartButton,
       enableFoodNameAction,
+      customButtons,
     } = this.props;
 
     return (
@@ -160,6 +162,8 @@ class FoodCard extends Component {
                 </CenterVertical>
               </AddToCartButton>
             )}
+
+            {customButtons && customButtons}
           </SpaceBetween>
         </AlignBottom>
       </DetailsContainer>

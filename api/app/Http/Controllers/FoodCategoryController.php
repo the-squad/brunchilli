@@ -34,7 +34,7 @@ class FoodCategoryController extends Controller
         $category = new FoodCategory();
         $category->fill($request->all());
         if ($category->save())
-            return response('',200);
+            return response(["id" => $category->id],200);
         return response('',500);
     }
 
