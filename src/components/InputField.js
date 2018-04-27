@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import hexToRgba from 'hex-to-rgba';
@@ -29,6 +29,7 @@ const StyledInput = styled.input`
   font-weight: ${FontWeights.normal};
   color: ${Colors.black};
   width: 100%;
+  line-height: ${FontSizes[FontTypes.Body]};
 `;
 
 const ErrorMessage = Text.extend`
@@ -42,8 +43,8 @@ class InputField extends Component {
   static propTypes = {
     type: PropTypes.string,
     width: PropTypes.number,
-    icon: PropTypes.object.isRequired,
-    iconWidth: PropTypes.node.isRequired,
+    icon: PropTypes.object,
+    iconWidth: PropTypes.number,
     placeholder: PropTypes.string.isRequired,
     value: PropTypes.string,
     onChange: PropTypes.func,
@@ -58,10 +59,12 @@ class InputField extends Component {
         errorMessage: PropTypes.string,
       }),
     ),
+    hideErrorMessage: PropTypes.bool,
   };
 
   static defaultProps = {
     type: 'string',
+    hideErrorMessage: false,
     onChange: () => {},
     onBlur: () => {},
     onFocus: () => {},
@@ -181,14 +184,27 @@ class InputField extends Component {
   };
 
   render() {
-    const { icon, iconWidth, placeholder, value, disable, type, width } = this.props;
+    const {
+      icon,
+      iconWidth,
+      placeholder,
+      value,
+      disable,
+      type,
+      width,
+      hideErrorMessage,
+    } = this.props;
     const { color, errorMessage } = this.state;
 
     return (
       <div>
         <InputFieldContainer width={width} borderColor={color}>
-          <Icon icon={icon} width={iconWidth} color={color} />
-          <Space width={Spacing.get('3x')} />
+          {icon && (
+            <Fragment>
+              <Icon icon={icon} width={iconWidth} color={color} />
+              <Space width={Spacing.get('3x')} />
+            </Fragment>
+          )}
           <StyledInput
             placeholder={placeholder}
             value={value}
@@ -199,9 +215,11 @@ class InputField extends Component {
             type={type}
           />
         </InputFieldContainer>
-        <ErrorMessage type={FontTypes.Caption} color={Colors.danger} width={width}>
-          {errorMessage}
-        </ErrorMessage>
+        {!hideErrorMessage && (
+          <ErrorMessage type={FontTypes.Caption} color={Colors.danger} width={width}>
+            {errorMessage}
+          </ErrorMessage>
+        )}
       </div>
     );
   }
