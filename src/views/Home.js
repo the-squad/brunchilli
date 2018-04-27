@@ -42,11 +42,11 @@ class Home extends Component {
         <Center>
           <AlignRight>
             <Text type={FontTypes.BigTitle} fontWeight={FontWeights.semiBold} color="#fff">
-              Lorem Ipsum is simply dummy text
+              Food is our common ground,
             </Text>
             <Space height={Spacing.get('2x')} display="block" />
             <Text type={FontTypes.BigTitle} fontWeight={FontWeights.semiBold} color="#fff">
-              of the printing andtypesetting industry.
+              a universal experience.
             </Text>
             <Space height={Spacing.get('8x')} display="block" />
             <SearchBar onSearch={this.onSearch} />
