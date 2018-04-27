@@ -39,7 +39,7 @@ class UserPortal extends Component {
     user.setUser({ id, name, phone, email, photo, address });
     this.props.getHeaderRef().renderUserTabs({ name, photo });
     const queryString = QueryString.parse(window.location.search);
-    this.props.history.push(queryString.callbackUrl);
+    this.props.history.push(queryString.returnUrl);
   };
 
   render() {
