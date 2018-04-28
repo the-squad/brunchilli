@@ -22,6 +22,7 @@ class FoodResource extends JsonResource
             "price" => $this->price,
             "rate" => $this->getRate(),
             "category" => $this->category->name,
+            "categoryId" => $this->category->id,
             "comments" => CommentResource::collection($this->comments)
         ];
     }
