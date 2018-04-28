@@ -49,6 +49,7 @@ const CoverPhoto = styled.img`
   width: 100%;
   height: ${coverPhotoHeight};
   object-fit: cover;
+  border-radius: 4px;
 `;
 
 const DotsSlider = styled.div`
@@ -69,6 +70,7 @@ const PageDot = styled.div`
 
 const PhotosSlider = props => (
   <Slider
+    {...props}
     wrapAround
     renderCenterLeftControls={({ previousSlide }) => (
       <LeftArrow onClick={previousSlide}>
@@ -98,6 +100,10 @@ const PhotosSlider = props => (
 
 PhotosSlider.propTypes = {
   photos: PropTypes.array,
+};
+
+PhotosSlider.defaultProps = {
+  photos: ['http://www.iberocons.com/en/wp-content/uploads/2014/04/placeholder4.png'],
 };
 
 export default PhotosSlider;
