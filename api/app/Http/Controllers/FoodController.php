@@ -83,7 +83,36 @@ class FoodController extends Controller
      */
     public function update(Request $request, Food $food)
     {
-        //
+        $this->validate($request, [
+            "name" => "required|min:3|max:50",
+            "description" => "required|min:2|max:200",
+            "price" => "required|numeric",
+            "category_id" => "required|exists:food_categories,id",
+            "img" => "required|array|min:1",
+            "img.*" => "required"
+        ]);
+        \DB::beginTransaction();
+        $i = 0;
+        $food->fill($request->all());
+        $food->save();
+        foreach ($food->photos as $photo) {
+            $photo->delete();
+        }
+        foreach ($request->img as $photo) {
+            $png_url = "/img/" . time() . "_" . $i . ".png";
+            $path = public_path() . "/storage" . $png_url;
+            $data = explode(',', $photo)[1];
+            $data = base64_decode($data);
+            Image::make($data)->resize(500, 500)->save($path);
+            $img = new Photo();
+            $img->path = $png_url;
+            $img->food_id = $food->id;
+            if (!$img->save())
+                \DB::rollBack();
+            $i++;
+        }
+        \DB::commit();
+        return new FoodResource($food);
     }
 
     /**
@@ -94,7 +123,10 @@ class FoodController extends Controller
      */
     public function destroy(Food $food)
     {
-        //
+        foreach ($food->photos as $photo) {
+            $photo->delete();
+        }
+        $food->delete();
     }
 
     public function createComment(Request $request)
@@ -134,5 +166,4 @@ class FoodController extends Controller
         }
         return response('error', 500);
     }
-
 }
