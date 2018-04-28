@@ -12,6 +12,8 @@ const urls = {
   editCategory: `${baseUrl}/api/category`,
   deleteCategory: `${baseUrl}/api/category`,
   addCategory: `${baseUrl}/api/category`,
+  addFood: `${baseUrl}/api/food`,
+  deleteFood: `${baseUrl}/api/food`,
 };
 
 export default urls;
