@@ -111,6 +111,7 @@ class Review extends PureComponent {
               value={comment}
               onChange={this.updateReview}
               callbackParams="comment"
+              showBorder={false}
             />
           </CommentField>
           <Rate editable rate={rate} onChange={this.updateReview} callbackParams="rate" />
