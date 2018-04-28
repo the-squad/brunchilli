@@ -38,7 +38,7 @@ class FoodController extends Controller
             "description" => "required|min:2|max:200",
             "price" => "required|numeric",
             "category_id" => "required|exists:food_categories,id",
-            "img" => "required|array|min:1|max:5",
+            "img" => "required|array|min:1",
             "img.*" => "required"
         ]);
         \DB::beginTransaction();
@@ -60,6 +60,7 @@ class FoodController extends Controller
             $i++;
         }
         \DB::commit();
+        return new FoodResource($food);
     }
 
     /**
