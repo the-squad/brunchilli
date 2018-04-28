@@ -28,7 +28,7 @@ const Price = props => (
 );
 
 Price.propTypes = {
-  price: PropTypes.number,
+  price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   color: PropTypes.oneOf(Object.values(Colors)),
 };
 
