@@ -51,7 +51,7 @@ class FoodController extends Controller
             $path = public_path() . "/storage" . $png_url;
             $data = explode(',', $photo)[1];
             $data = base64_decode($data);
-            Image::make($data)->resize(500, 500)->save($path);
+            Image::make($data)->fit(500, 500)->save($path);
             $img = new Photo();
             $img->path = $png_url;
             $img->food_id = $food->id;
@@ -103,7 +103,7 @@ class FoodController extends Controller
             $path = public_path() . "/storage" . $png_url;
             $data = explode(',', $photo)[1];
             $data = base64_decode($data);
-            Image::make($data)->resize(500, 500)->save($path);
+            Image::make($data)->fit(500, 500)->save($path);
             $img = new Photo();
             $img->path = $png_url;
             $img->food_id = $food->id;
