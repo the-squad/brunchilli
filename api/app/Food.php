@@ -55,6 +55,6 @@ class Food extends Model
         $rate = 0;
         foreach ($this->comments as $comment)
             $rate += $comment->rate;
-        return $this->comments->count() == 0 ? 0 : ceil($rate/$this->comments->count());
+        return $this->comments->count() == 0 ? 5 : ceil($rate/$this->comments->count());
     }
 }
