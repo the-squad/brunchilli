@@ -16,12 +16,14 @@ const StyledSelect = styled(Select)`
     .Select-placeholder {
       color: ${Colors.grey};
       font-size: ${FontSizes[FontTypes.Body]};
+      height: 38px;
     }
 
     input,
     .Select-value-label {
       color: ${Colors.black};
       font-size: ${FontSizes[FontTypes.Body]};
+      height: 38px;
     }
   }
 
