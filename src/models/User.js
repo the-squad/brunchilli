@@ -11,13 +11,14 @@ class User {
     return instance;
   }
 
-  setUser = ({ id, name, phone, email, photo, address }) => {
+  setUser = ({ id, name, phone, email, photo, address, isAdmin }) => {
     this.id = id;
     this.name = name;
     this.phone = phone;
     this.email = email;
     this.photo = photo;
     this.address = address;
+    this.isAdmin = isAdmin;
 
     Cookies.set(USER_ID, this.id);
   };
@@ -36,7 +37,9 @@ class User {
     address: this.address,
   });
 
-  isUserExists = () => !!this.id || Cookies.get(USER_ID);
+  isUserExists = () => !!this.id || !!Cookies.get(USER_ID);
+
+  isUserAdmin = () => this.isAdmin;
 
   getUserId = () => this.id || Cookies.get(USER_ID);
 }
