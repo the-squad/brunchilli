@@ -22,12 +22,14 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereTotalMoney($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereUserId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Food[] $foods
+ * @property-read \App\User $user
  */
 class Order extends Model
 {
     public function foods()
     {
-        return $this->belongsToMany(Food::class,'order_details');
+        return $this->belongsToMany(Food::class,'order_details')->withPivot(['quantity']);
     }
 
     public function user()

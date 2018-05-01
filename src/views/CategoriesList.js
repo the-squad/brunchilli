@@ -36,7 +36,7 @@ class CategoriesList extends Component {
     document.body.style.background = Colors.white;
   }
 
-  state = { categories: new Map(), newCategory: '' };
+  state = { categories: new Map(), newCategory: '', isAdding: false };
 
   componentDidMount() {
     Axios.get(Urls.getCategories).then(response => {
@@ -49,19 +49,29 @@ class CategoriesList extends Component {
   }
 
   addCategory = () => {
-    const category = this.state.newCategory;
+    const { newCategory } = this.state;
+    if (!newCategory) {
+      this.categoryField.showErrorMessage('Category can not be empty');
+      return true;
+    }
+
+    this.setState({
+      isAdding: true,
+    });
+
     const addCategoryBody = {
-      name: category,
+      name: newCategory,
     };
 
     Axios.post(Urls.addCategory, addCategoryBody).then(response => {
       if (response.status === HttpsStatus.OK) {
         this.setState(prevState => {
           const newCategories = prevState.categories;
-          const newCategory = response.data;
-          newCategories.set(newCategory.id, { id: newCategory.id, name: category });
+          const { id } = response.data;
+          newCategories.set(id, { id, name: newCategory });
 
           return {
+            isAdding: false,
             categories: newCategories,
             newCategory: '',
           };
@@ -82,7 +92,7 @@ class CategoriesList extends Component {
   };
 
   render() {
-    const { categories, newCategory } = this.state;
+    const { categories, newCategory, isAdding } = this.state;
 
     return (
       <CategoriesListContainer>
@@ -101,6 +111,9 @@ class CategoriesList extends Component {
               hideErrorMessage
               placeholder="Category"
               value={newCategory}
+              ref={categoryField => {
+                this.categoryField = categoryField;
+              }}
               onChange={category =>
                 this.setState({
                   newCategory: category,
@@ -108,7 +121,7 @@ class CategoriesList extends Component {
               }
             />
             <Space width={Spacing.get('2x')} />
-            <Button primary={false} onClick={this.addCategory}>
+            <Button disabled={isAdding} primary={false} onClick={this.addCategory}>
               Add Category
             </Button>
           </CenterVertical>

@@ -18,8 +18,8 @@ class CreatePhotosTable extends Migration
             $table->string("path");
             $table->timestamps();
 
-            $table->integer("food_id");
-            $table->foreign('food_id')->references('id')->on('foods');
+            $table->integer("food_id")->unsigned();
+            $table->foreign('food_id')->references('id')->on('foods')->onDelete('cascade');
         });
     }
 

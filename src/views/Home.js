@@ -25,12 +25,8 @@ class Home extends Component {
     history: PropTypes.any,
   };
 
-  componentDidMount() {
-    // TOOD:
-  }
-
   onSearch = query => {
-    const queryString = `search=${query}`;
+    const queryString = query ? `search=${query}` : '';
     this.props.history.push(`/results/?${queryString}`);
   };
 

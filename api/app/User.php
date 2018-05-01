@@ -26,6 +26,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $address
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhone($value)
+ * @property string|null $photo
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Comment[] $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $orders
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhoto($value)
  */
 class User extends Authenticatable
 {

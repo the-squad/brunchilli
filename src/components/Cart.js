@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Axios from 'axios';
+import HttpsStatus from 'http-status-codes';
 import styled from 'styled-components';
 
 import Icon from './Icon';
@@ -19,6 +21,7 @@ import Price from './Price';
 
 import User from '../models/User';
 import CartModel from '../models/Cart';
+import Urls from '../Urls';
 
 const CartContainer = styled.div`
   padding: ${Spacing.get('6x')};
@@ -54,15 +57,37 @@ class Cart extends Component {
     this.state = {
       items: this.cart.getCart() || new Map(),
       total: this.calculateTotal(this.cart.getCart()) || 0,
+      isAdding: false,
     };
   }
 
   onCheckout = () => {
     const user = new User();
+    const { id, address } = user.getUser();
     this.cart.setCart(this.state.items);
     if (user.isUserExists()) {
-      // TODO: checkout
-      this.props.history.push('/confirmation');
+      this.setState({
+        isAdding: true,
+      });
+
+      const orderBody = {
+        user_id: id,
+        address,
+        foods: Array.from(this.cart.getCart().values()).map(item => ({
+          food_id: item.id,
+          quantity: item.count,
+        })),
+      };
+
+      Axios.post(Urls.order, orderBody).then(response => {
+        if (response.status === HttpsStatus.OK || response.status === HttpsStatus.CREATED) {
+          this.setState({
+            items: new Map(),
+            isAdding: false,
+          });
+          this.props.history.push('/confirmation');
+        }
+      });
     } else {
       this.props.history.push('/login?callbackUrl=results');
     }
@@ -139,7 +164,7 @@ class Cart extends Component {
   };
 
   render() {
-    const { items, total } = this.state;
+    const { items, total, isAdding } = this.state;
     const itemsValues = Array.from(items.values());
 
     return (
@@ -176,7 +201,7 @@ class Cart extends Component {
 
         <Space display="block" height={Spacing.get('6x')} />
 
-        <Button width="100%" disabled={items.size === 0} onClick={this.onCheckout}>
+        <Button width="100%" disabled={items.size === 0 || isAdding} onClick={this.onCheckout}>
           Checkout
         </Button>
       </CartContainer>

@@ -75,7 +75,14 @@ const Confirmation = ({ history }) => {
 
         <Space display="block" height={Spacing.get('8x')} />
 
-        <Button onClick={() => history.push('/')}>Make another order</Button>
+        <Button
+          onClick={() => {
+            cart.clear();
+            history.push('/');
+          }}
+        >
+          Make another order
+        </Button>
       </Center>
     </ConfirmationContainer>
   );

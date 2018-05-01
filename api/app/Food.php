@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Food whereRate($value)
  * @property-read \App\FoodCategory $category
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Comment[] $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $orders
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Photo[] $photos
  */
 class Food extends Model
 {
@@ -55,6 +57,6 @@ class Food extends Model
         $rate = 0;
         foreach ($this->comments as $comment)
             $rate += $comment->rate;
-        return $this->comments->count() == 0 ? 0 : ceil($rate/$this->comments->count());
+        return $this->comments->count() == 0 ? 5 : ceil($rate/$this->comments->count());
     }
 }

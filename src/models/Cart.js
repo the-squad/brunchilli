@@ -27,6 +27,10 @@ class Cart {
     return total.toFixed(2);
   };
 
+  clear = () => {
+    this.cart = new Map();
+  };
+
   isNotEmpty = () => this.cart.size() !== 0;
 }
 

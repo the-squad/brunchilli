@@ -18,6 +18,7 @@ import Spacing from '../base/Spacing';
 
 import keyGenerator from '../KeyGenerator';
 import Urls from '../Urls';
+import EmptyState from '../components/EmptyState';
 
 const SearchGrid = styled.div`
   display: grid;
@@ -74,7 +75,7 @@ class Search extends Component {
 
   search = () => {
     const queryString = QueryString.parse(window.location.search);
-    const searchQuery = queryString.search;
+    const searchQuery = queryString.search || '';
     Axios.get(`${Urls.search}?query=${searchQuery}`).then(response => {
       this.setState({
         searchResults: response.data.data,
@@ -115,23 +116,27 @@ class Search extends Component {
               isLoading={isLoadingMore}
               disable={disableLoadMore}
             >
-              <CardsList>
-                {searchResults.map(item => (
-                  <FoodCard
-                    key={keyGenerator('food')}
-                    id={item.id}
-                    photos={item.photos}
-                    name={item.name}
-                    desc={item.desc}
-                    category={item.category}
-                    rate={item.rate}
-                    price={item.price}
-                    comments={item.comments}
-                    showFoodDetails={this.showFoodItemModal}
-                    onAddToCartClick={this.addItemToCart}
-                  />
-                ))}
-              </CardsList>
+              {searchResults.length === 0 ? (
+                <EmptyState icon="search" text="No items matched your search" />
+              ) : (
+                <CardsList>
+                  {searchResults.map(item => (
+                    <FoodCard
+                      key={keyGenerator('food')}
+                      id={item.id}
+                      photos={item.photos}
+                      name={item.name}
+                      desc={item.desc}
+                      category={item.category}
+                      rate={item.rate}
+                      price={item.price}
+                      comments={item.comments}
+                      showFoodDetails={this.showFoodItemModal}
+                      onAddToCartClick={this.addItemToCart}
+                    />
+                  ))}
+                </CardsList>
+              )}
             </Pagination>
           </div>
           <Cart

@@ -16,7 +16,7 @@ const PriceContainer = styled.div`
 `;
 
 const Price = props => (
-  <PriceContainer>
+  <PriceContainer {...props}>
     <Text color={props.color} tag="label" type={FontTypes.Title} fontWeight={FontWeights.light}>
       {props.price}
     </Text>
@@ -28,7 +28,7 @@ const Price = props => (
 );
 
 Price.propTypes = {
-  price: PropTypes.number,
+  price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   color: PropTypes.oneOf(Object.values(Colors)),
 };
 

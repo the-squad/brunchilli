@@ -34,10 +34,10 @@ class UserPortal extends Component {
     document.body.style.background = Colors.white;
   }
 
-  onSuccess = ({ id, name, phone, email, photo, address }) => {
+  onSuccess = ({ id, name, phone, email, photo, address, isAdmin }) => {
     const user = new User();
     user.setUser({ id, name, phone, email, photo, address });
-    this.props.getHeaderRef().renderUserTabs({ name, photo });
+    this.props.getHeaderRef().renderUserTabs({ name, photo, isAdmin });
     const queryString = QueryString.parse(window.location.search);
     this.props.history.push(queryString.returnUrl);
   };

@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\FoodCategory whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\FoodCategory whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Food[] $foods
  */
 class FoodCategory extends Model
 {
