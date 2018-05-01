@@ -94,8 +94,6 @@ class FoodItemModal extends Component {
           <Text type={FontTypes.Heading}>Reviews</Text>
           <Space display="block" height={Spacing.get('4x')} />
 
-          {comments.length === 0 && <EmptyState icon="star" text="There is no reviews yet" />}
-
           <CommentsContainer>
             {isUserExists && (
               <Review
@@ -108,6 +106,8 @@ class FoodItemModal extends Component {
             )}
             {comments.map(comment => <Comment key={keyGenerator('com')} {...comment} />)}
           </CommentsContainer>
+
+          {comments.length === 0 && <EmptyState icon="star" text="There is no reviews yet" />}
         </FootItemModalContainer>
       </Modal>
     );
