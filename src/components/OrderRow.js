@@ -12,7 +12,7 @@ import Colors from '../base/Colors';
 const OrderRowContainer = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 5% 20% 20% 15% 25% 15%;
+  grid-template-columns: 7% 20% 21% 18% 25% 10%;
   cursor: ${props => !props.isHeader && 'pointer'};
   padding: 0 ${Spacing.get('4x')};
   height: 50px;
@@ -97,7 +97,7 @@ const OrderRow = ({
         color={isHeader && Colors.white}
         fontWeight={isHeader && FontWeights.bold}
       >
-        {total} {!isHeader && 'L.E'}
+        {typeof total === 'number' ? parseFloat(total).toFixed(2) : total} {!isHeader && 'L.E'}
       </Text>
     </JustifyEnd>
   </OrderRowContainer>

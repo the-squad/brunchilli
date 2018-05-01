@@ -38,6 +38,7 @@ class PhotoExplorer extends Component {
       <input
         type="file"
         multiple
+        accept=".png,.jpg,.jpeg"
         onChange={this.uploadPhoto}
         ref={photoInput => {
           this.photoInput = photoInput;
