@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
@@ -23,7 +24,7 @@ class UserController extends Controller
         ]);
 
         $user = User::where('email', '=', $request->email)->get()->first();
-        if ($user->password != $request->password) {
+        if (!Hash::check($request->password, $user->password)) {
             return response('', 500);
         }
         return response(new UserResource($user), 200);
@@ -41,7 +42,11 @@ class UserController extends Controller
         ]);
         \DB::beginTransaction();
         $user = new User();
+
         $user->fill($request->all());
+
+        $user->password=Hash::make($request->password);
+
         if ($request->photo) {
             $photo = $request->photo;
             $png_url = "/img/" . time() . ".png";
