@@ -251,6 +251,7 @@ class FoodItemForm extends Component {
       categories,
       isLoading,
       showPhotosErrorMessage,
+      isEditMode,
     } = this.state;
     const categoriesList = categories.map(categoryItem => ({
       value: categoryItem.id,
@@ -338,14 +339,16 @@ class FoodItemForm extends Component {
           <Space display="block" height={Spacing.get('4x')} />
 
           <ButtonsContainer>
-            <Button
-              primary={false}
-              disabled={isLoading}
-              color={Colors.danger}
-              onClick={this.onDelete}
-            >
-              Delete
-            </Button>
+            {isEditMode && (
+              <Button
+                primary={false}
+                disabled={isLoading}
+                color={Colors.danger}
+                onClick={this.onDelete}
+              >
+                Delete
+              </Button>
+            )}
             <Space width={Spacing.get('4x')} />
             <Button onClick={this.onSave} disabled={isLoading}>
               Save Changes
