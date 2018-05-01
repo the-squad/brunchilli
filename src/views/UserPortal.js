@@ -36,7 +36,7 @@ class UserPortal extends Component {
 
   onSuccess = ({ id, name, phone, email, photo, address, isAdmin }) => {
     const user = new User();
-    user.setUser({ id, name, phone, email, photo, address });
+    user.setUser({ id, name, phone, email, photo, address, isAdmin });
     this.props.getHeaderRef().renderUserTabs({ name, photo, isAdmin });
     const queryString = QueryString.parse(window.location.search);
     this.props.history.push(queryString.returnUrl);
