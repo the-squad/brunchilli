@@ -22,6 +22,7 @@ class PhotoExplorer extends Component {
         loadedPhotos += 1;
         if (loadedPhotos === Array.from(files).length - 1) {
           this.onChange(uploadedFiles, this.callbackParams);
+          this.photoInput.value = '';
         }
       };
       picReader.readAsDataURL(file);
