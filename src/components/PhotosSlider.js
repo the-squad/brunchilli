@@ -71,17 +71,21 @@ const PageDot = styled.div`
 const PhotosSlider = props => (
   <Slider
     {...props}
-    wrapAround
-    renderCenterLeftControls={({ previousSlide }) => (
-      <LeftArrow onClick={previousSlide}>
-        <Icon icon={IconLoader.getInstance().get('left-arrow')} width={17} color="#fff" />
-      </LeftArrow>
-    )}
-    renderCenterRightControls={({ nextSlide }) => (
-      <RightArrow onClick={nextSlide}>
-        <Icon icon={IconLoader.getInstance().get('right-arrow')} width={17} color="#fff" />
-      </RightArrow>
-    )}
+    swiping={false}
+    renderCenterLeftControls={({ previousSlide, currentSlide }) =>
+      currentSlide !== 0 && (
+        <LeftArrow onClick={previousSlide}>
+          <Icon icon={IconLoader.getInstance().get('left-arrow')} width={17} color="#fff" />
+        </LeftArrow>
+      )
+    }
+    renderCenterRightControls={({ nextSlide, slideCount, currentSlide }) =>
+      slideCount !== currentSlide + 1 && (
+        <RightArrow onClick={nextSlide}>
+          <Icon icon={IconLoader.getInstance().get('right-arrow')} width={17} color="#fff" />
+        </RightArrow>
+      )
+    }
     renderBottomCenterControls={({ goToSlide, currentSlide }) => (
       <DotsSlider>
         {props.photos.map((_, index) => (
