@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import styled from 'styled-components';
 import HttpsStatus from 'http-status-codes';
 
 import { INPUT_WIDTH, ICON_WIDTH } from './Constants';
@@ -9,16 +10,22 @@ import IconLoader from '../components/IconLoader';
 import InputField from '../components/InputField';
 import Text from '../components/Text';
 import Space from '../components/Space';
-import AlignRight from '../components/AlignRight';
+import SpaceBetween from '../components/SpaceBetween';
 import Button from '../components/Button';
 
-import { FontTypes, FontWeights } from '../base/Fonts';
+import { FontSizes, FontTypes, FontWeights } from '../base/Fonts';
 import Validation from '../base/ValidationRegex';
 import Spacing from '../base/Spacing';
 import Colors from '../base/Colors';
 
 import validateFields from '../utils/ValidateFields';
 import Urls from '../Urls';
+
+const LoginFailureMessage = styled.label`
+  color: ${Colors.danger};
+  font-size: ${FontSizes[FontTypes.Caption]};
+  opacity: ${props => (props.show ? 1 : 0)};
+`;
 
 class Login extends Component {
   constructor(props) {
@@ -31,6 +38,7 @@ class Login extends Component {
     email: undefined,
     password: undefined,
     isLoggingIn: false,
+    showErrorMessage: false,
   };
 
   onLogin = () => {
@@ -41,6 +49,7 @@ class Login extends Component {
       this.setState(
         {
           isLoggingIn: true,
+          showErrorMessage: false,
         },
         () => {
           const loginBody = this.state;
@@ -54,6 +63,7 @@ class Login extends Component {
             .catch(() => {
               this.setState({
                 isLoggingIn: false,
+                showErrorMessage: true,
               });
             });
         },
@@ -72,7 +82,7 @@ class Login extends Component {
   };
 
   render() {
-    const { email, password, isLoggingIn } = this.state;
+    const { email, password, isLoggingIn, showErrorMessage } = this.state;
     return (
       <UserPortal
         ref={userPortal => {
@@ -124,11 +134,14 @@ class Login extends Component {
           }}
         />
         <Space display="block" height={Spacing.get('2x')} />
-        <AlignRight>
+        <SpaceBetween>
+          <LoginFailureMessage show={showErrorMessage}>
+            Email or password is incorrect
+          </LoginFailureMessage>
           <Button disabled={isLoggingIn} onClick={this.onLogin}>
             Login
           </Button>
-        </AlignRight>
+        </SpaceBetween>
       </UserPortal>
     );
   }

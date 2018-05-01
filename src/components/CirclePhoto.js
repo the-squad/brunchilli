@@ -6,6 +6,9 @@ const CirclePhoto = styled.img`
   height: ${props => props.radius}px;
   border-radius: 50%;
   object-fit: cover;
+  &:not([src]) {
+    visibility: hidden;
+  }
 `;
 
 CirclePhoto.propTypes = {

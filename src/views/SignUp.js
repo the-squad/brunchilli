@@ -55,7 +55,7 @@ class SignUp extends Component {
               }
             })
             .catch(() => {
-              // TODO: show error message from the server
+              this.inputRefs.get('email').showErrorMessage('This email already exists');
               this.setState({
                 isSigningUp: false,
               });

@@ -1,8 +1,9 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import { injectGlobal } from 'styled-components';
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import axios from 'axios';
 
+import AuthRoute from './components/AuthRoute';
 import Header from './components/Header';
 import IconLoader from './components/IconLoader';
 import Splash from './components/Splash';
@@ -64,6 +65,7 @@ class App extends PureComponent {
 
   render() {
     const { isGettingUser } = this.state;
+    const redirect = this.user.isUserAdmin() ? '/menu' : '/';
 
     if (isGettingUser) {
       return <Splash />;
@@ -87,12 +89,12 @@ class App extends PureComponent {
             path="/register"
             component={() => <SignUp {...this.props} getHeaderRef={this.getHeaderRef} />}
           />
-          <Route path="/menu" component={FoodMenu} />
-          <Route path="/categories" component={CategoriesList} />
-          <Route path="/orders" component={OrdersHistory} />
-          <Route path="/" exact component={Home} />
-          <Route path="/results" component={Search} />
-          <Route path="/confirmation" component={Confirmation} />
+          <AuthRoute admin redirect={redirect} path="/menu" component={FoodMenu} />
+          <AuthRoute admin redirect={redirect} path="/categories" component={CategoriesList} />
+          <AuthRoute admin redirect={redirect} path="/orders" component={OrdersHistory} />
+          <AuthRoute redirect={redirect} path="/" exact component={Home} />
+          <AuthRoute redirect={redirect} path="/results" component={Search} />
+          <AuthRoute redirect={redirect} path="/confirmation" component={Confirmation} />
         </Switch>
       </div>
     );

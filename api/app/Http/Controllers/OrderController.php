@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderResponce;
 use App\Order;
 use App\User;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        return OrderResponce::collection(Order::with(['foods.category','user'])->latest()->get());
     }
 
     /**

@@ -112,7 +112,7 @@ class FoodController extends Controller
             $i++;
         }
         \DB::commit();
-        return new FoodResource($food);
+        return new FoodResource(Food::with(['photos','comments','category'])->find($food->id));
     }
 
     /**
