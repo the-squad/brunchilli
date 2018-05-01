@@ -35,9 +35,9 @@ class FoodController extends Controller
     {
         $this->validate($request, [
             "name" => "required|min:3|max:50",
-            "description" => "required|min:2|max:200",
+            "description" => "nullable|max:200",
             "price" => "required|numeric",
-            "category_id" => "required|exists:food_categories,id",
+            "category_id" => "nullable|exists:food_categories,id",
             "img" => "required|array|min:1",
             "img.*" => "required"
         ]);
@@ -85,9 +85,9 @@ class FoodController extends Controller
     {
         $this->validate($request, [
             "name" => "required|min:3|max:50",
-            "description" => "required|min:2|max:200",
+            "description" => "nullable|max:200",
             "price" => "required|numeric",
-            "category_id" => "required|exists:food_categories,id",
+            "category_id" => "nullable|exists:food_categories,id",
             "img" => "required|array|min:1",
             "img.*" => "required"
         ]);
