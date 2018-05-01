@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import Axios from 'axios';
 
 import Text from '../components/Text';
 import Space from '../components/Space';
@@ -8,6 +9,8 @@ import OrderRow from '../components/OrderRow';
 import { FontTypes } from '../base/Fonts';
 import Spacing from '../base/Spacing';
 import Colors from '../base/Colors';
+import OrderDetails from '../components/OrderDetails';
+import Urls from '../Urls';
 
 const OrdersHistoryContainer = styled.div`
   width: 100%;
@@ -15,9 +18,51 @@ const OrdersHistoryContainer = styled.div`
   margin-bottom: ${Spacing.get('4x')};
 `;
 
+const OrdersHistoryGrid = styled.div`
+  display: grid;
+  grid-template-columns: 60% auto 34%;
+  grid-column-gap: 3%;
+  width: 100%;
+`;
+
+const OrdersHistoryList = styled.div`
+  display: grid;
+  grid-auto-rows: auto;
+  grid-row-gap: ${Spacing.get('1x')};
+`;
+
+const Divider = styled.div`
+  height: 100%;
+  width: 1px;
+  background-color: ${Colors.grey};
+`;
+
 class OrdersHistory extends Component {
-  state = { orders: [] };
+  state = { orders: new Map(), currentSelectedItem: -1, orderDetails: [] };
+
+  componentDidMount() {
+    Axios.get(Urls.getOrders).then(response => {
+      this.setState(() => {
+        const orders = new Map();
+        response.data.data.forEach(order => orders.set(order.orderId, order));
+
+        return {
+          orders,
+        };
+      });
+    });
+  }
+
+  showOrderDetails = (orderId, orderDetails) => {
+    this.setState({
+      currentSelectedItem: orderId,
+      orderDetails,
+    });
+  };
+
   render() {
+    const { orders, currentSelectedItem, orderDetails } = this.state;
+
     return (
       <OrdersHistoryContainer>
         <Space display="block" height={Spacing.get('6x')} />
@@ -27,13 +72,46 @@ class OrdersHistory extends Component {
           You can see all orders history
         </Text>
 
-        <OrderRow
-          photo="http://snowball.dev.com:8000/storage/img/1525176349.png"
-          name="Muhammad Tarek"
-          address="Othmen Bashaa"
-          phoneNumber="01004402709"
-          total={300}
-        />
+        <Space display="block" height={Spacing.get('4x')} />
+
+        <OrdersHistoryGrid>
+          <OrdersHistoryList>
+            <OrderRow
+              name="Customer"
+              date="Date"
+              address="Address"
+              phoneNumber="Phone Number"
+              total="Total"
+              isHeader
+            />
+
+            {Array.from(orders.values()).map(order => {
+              let total = 0;
+              order.orderDetails.forEach(orderDetailsMap => {
+                total += orderDetailsMap.price * orderDetailsMap.amount;
+              });
+
+              return (
+                <OrderRow
+                  isActive={order.orderId === currentSelectedItem}
+                  id={order.orderId}
+                  photo={order.photo}
+                  name={order.name}
+                  date={order.orderDate}
+                  address={order.address}
+                  phoneNumber={order.phoneNumber}
+                  total={total}
+                  items={order.orderDetails}
+                  onClick={this.showOrderDetails}
+                />
+              );
+            })}
+          </OrdersHistoryList>
+
+          <Divider />
+
+          <OrderDetails items={orderDetails} />
+        </OrdersHistoryGrid>
       </OrdersHistoryContainer>
     );
   }
