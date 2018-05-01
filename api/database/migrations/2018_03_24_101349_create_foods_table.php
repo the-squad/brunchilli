@@ -20,7 +20,7 @@ class CreateFoodsTable extends Migration
             $table->decimal('price');
             $table->timestamps();
 
-            $table->integer('category_id')->unsigned();
+            $table->integer('category_id')->unsigned()->nullable();
             $table->foreign('category_id')->references('id')->on('food_categories')->onDelete('cascade');
         });
     }
