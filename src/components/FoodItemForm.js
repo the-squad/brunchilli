@@ -11,11 +11,13 @@ import PhotosSlider from './PhotosSlider';
 import TextArea from './TextArea';
 import Button from './Button';
 import Space from './Space';
+import PhotosPreview from './PhotosPreview';
 
 import Colors from '../base/Colors';
 import Spacing from '../base/Spacing';
+import { FontSizes, FontTypes, FontWeights } from '../base/Fonts';
 import Urls from '../Urls';
-import PhotosPreview from './PhotosPreview';
+import validateFields from '../utils/ValidateFields';
 
 const ModalContainer = styled.div`
   padding: ${Spacing.get('4x')} ${Spacing.get('6x')} ${Spacing.get('6x')};
@@ -30,7 +32,7 @@ const FirstRowContainer = styled.div`
 const FormContainer = styled.div`
   display: grid;
   grid-auto-rows: auto;
-  grid-row-gap: ${Spacing.get('6x')};
+  grid-row-gap: ${Spacing.get('7x')};
   width: 100%;
 `;
 
@@ -38,6 +40,13 @@ const ButtonsContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+`;
+
+const PhotosErrorMessage = styled.label`
+  font-size: ${FontSizes[FontTypes.Caption]};
+  color: ${Colors.danger};
+  font-weight: ${FontWeights.normal};
+  display: ${props => (props.show ? 'block' : 'none')};
 `;
 
 let counter = -1;
@@ -49,10 +58,12 @@ const createPhotoId = () => {
 class FoodItemForm extends Component {
   static propTypes = {
     onItemSave: PropTypes.func,
+    onItemDelete: PropTypes.func,
   };
 
   static defaultProps = {
     onItemSave: () => {},
+    onItemDelete: () => {},
   };
 
   state = {
@@ -64,6 +75,7 @@ class FoodItemForm extends Component {
     desc: undefined,
     category: undefined,
     isLoading: false,
+    showPhotosErrorMessage: false,
   };
 
   componentDidMount() {
@@ -74,41 +86,76 @@ class FoodItemForm extends Component {
     );
   }
 
-  onSave = () => {
-    const { isEditMode } = this.state;
+  onSave = async () => {
+    const { isEditMode, id, name, desc, price, category } = this.state;
     const { onItemSave } = this.props;
+    let { photos } = this.state;
+    const requiredFields = [this.nameField, this.priceField];
+    let response;
+
+    if (photos.size === 0) {
+      this.setState({
+        showPhotosErrorMessage: true,
+      });
+      return;
+    } else if (!validateFields(requiredFields)) {
+      return;
+    }
 
     this.setState({
       isLoading: true,
     });
 
     if (isEditMode) {
-      // TODO: edit mode
-    } else {
-      const { name, desc, price, category, photos } = this.state;
-      const addItemBody = {
-        name,
-        description: desc,
-        price,
-        category_id: category.value,
-        img: Array.from(photos.values()),
-      };
+      photos = await Promise.all(
+        Array.from(this.state.photos.values()).map(async photo => {
+          let convertedPhoto = photo;
+          if (photo.includes('http')) {
+            convertedPhoto = await this.convertImgToBase64URL(photo);
+          }
+          return convertedPhoto;
+        }),
+      );
+    }
 
-      Axios.post(Urls.addFood, addItemBody).then(response => {
-        this.setState({
-          isLoading: false,
-        });
+    const addItemBody = {
+      name,
+      description: desc,
+      price,
+      category_id: category && category.value ? category.value : category,
+      img: Array.from(photos.values()),
+    };
 
-        if (response.status === HttpsStatus.OK || response.status === HttpsStatus.CREATED) {
-          this.modal.closeModal();
-          onItemSave(response.data.data);
-        }
+    try {
+      if (isEditMode) {
+        response = await Axios.put(`${Urls.editFood}/${id}`, addItemBody);
+      } else {
+        response = await Axios.post(Urls.addFood, addItemBody);
+      }
+    } finally {
+      this.setState({
+        isLoading: false,
       });
+    }
+
+    if (response.status === HttpsStatus.OK || response.status === HttpsStatus.CREATED) {
+      this.modal.closeModal();
+      onItemSave(response.data.data);
     }
   };
 
   onDelete = () => {
-    Axios.delete(Urls.deleteFood);
+    this.setState({
+      isLoading: true,
+    });
+
+    const { id } = this.state;
+    Axios.delete(`${Urls.deleteFood}/${id}`).then(response => {
+      if (response.status === HttpsStatus.OK || response.status === HttpsStatus.CREATED) {
+        this.modal.closeModal();
+        this.props.onItemDelete(id);
+      }
+    });
   };
 
   updateState = (value, key) => {
@@ -117,12 +164,13 @@ class FoodItemForm extends Component {
     });
   };
 
-  showModal = ({ photos, name, price, desc, categoryId }) => {
+  showModal = ({ id, photos, name, price, desc, categoryId }) => {
     const photosMap = new Map();
     photos && photos.forEach(photo => photosMap.set(createPhotoId(), photo));
 
     this.modal.openModal();
     this.setState({
+      id,
       photos: photosMap,
       name,
       price,
@@ -133,22 +181,23 @@ class FoodItemForm extends Component {
     });
   };
 
-  convertImgToBase64URL = (url, callback, outputFormat) => {
-    const img = new Image();
-    img.crossOrigin = 'Anonymous';
-    img.onload = () => {
-      let canvas = document.createElement('CANVAS');
-      const ctx = canvas.getContext('2d');
+  convertImgToBase64URL = (url, outputFormat) =>
+    new Promise(resolve => {
+      const img = new Image();
+      img.crossOrigin = 'Anonymous';
+      img.onload = () => {
+        let canvas = document.createElement('CANVAS');
+        const ctx = canvas.getContext('2d');
 
-      canvas.height = img.height;
-      canvas.width = img.width;
-      ctx.drawImage(img, 0, 0);
-      const dataURL = canvas.toDataURL(outputFormat);
-      callback(dataURL);
-      canvas = null;
-    };
-    img.src = url;
-  };
+        canvas.height = img.height;
+        canvas.width = img.width;
+        ctx.drawImage(img, 0, 0);
+        const dataURL = canvas.toDataURL(outputFormat);
+        resolve(dataURL);
+        canvas = null;
+      };
+      img.src = url;
+    });
 
   changeCoverPreview = key => {
     this.setState({
@@ -172,6 +221,7 @@ class FoodItemForm extends Component {
 
       return {
         photos: newPhotos,
+        showPhotosErrorMessage: false,
       };
     });
   };
@@ -200,6 +250,7 @@ class FoodItemForm extends Component {
       category,
       categories,
       isLoading,
+      showPhotosErrorMessage,
     } = this.state;
     const categoriesList = categories.map(categoryItem => ({
       value: categoryItem.id,
@@ -237,6 +288,11 @@ class FoodItemForm extends Component {
             selectedPhotoKey={selectedPhotoKey}
             {...this.props}
           />
+
+          <PhotosErrorMessage show={showPhotosErrorMessage}>
+            You need to upload one photo at least
+          </PhotosErrorMessage>
+
           <Space display="block" height={Spacing.get('2x')} />
 
           <FirstRowContainer>
@@ -247,6 +303,9 @@ class FoodItemForm extends Component {
               callbackParams="name"
               isRequired
               width={200}
+              ref={nameField => {
+                this.nameField = nameField;
+              }}
             />
             <InputField
               placeholder="Price"
@@ -255,6 +314,9 @@ class FoodItemForm extends Component {
               callbackParams="price"
               isRequired
               width={200}
+              ref={priceField => {
+                this.priceField = priceField;
+              }}
             />
           </FirstRowContainer>
           <FormContainer>
@@ -269,13 +331,19 @@ class FoodItemForm extends Component {
               value={category}
               onChange={value => this.updateState(value, 'category')}
               options={categoriesList}
+              required
             />
           </FormContainer>
 
           <Space display="block" height={Spacing.get('4x')} />
 
           <ButtonsContainer>
-            <Button primary={false} color={Colors.danger}>
+            <Button
+              primary={false}
+              disabled={isLoading}
+              color={Colors.danger}
+              onClick={this.onDelete}
+            >
               Delete
             </Button>
             <Space width={Spacing.get('4x')} />
