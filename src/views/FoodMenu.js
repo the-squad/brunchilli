@@ -7,6 +7,7 @@ import PhotosSlider from '../components/PhotosSlider';
 import FoodItem from '../components/FoodItem';
 import Space from '../components/Space';
 import FoodItemForm from '../components/FoodItemForm';
+import EmptyState from '../components/EmptyState';
 
 import { FontTypes } from '../base/Fonts';
 import Colors from '../base/Colors';
@@ -37,6 +38,10 @@ const FoodItemContainer = styled.div`
   border-radius: 4px;
   height: max-content;
   overflow: hidden;
+`;
+
+const NoItemsContainer = styled.div`
+  height: 50vh;
 `;
 
 class FoodMenu extends Component {
@@ -70,6 +75,17 @@ class FoodMenu extends Component {
     });
   };
 
+  onItemDelete = id => {
+    this.setState(prevState => {
+      const newItems = prevState.foodItems;
+      newItems.delete(id);
+
+      return {
+        foodItems: newItems,
+      };
+    });
+  };
+
   render() {
     const { foodItems } = this.state;
 
@@ -90,20 +106,26 @@ class FoodMenu extends Component {
 
           <Space display="block" height={Spacing.get('10x')} />
 
-          <FoodMenuGrid>
-            {Array.from(foodItems.values()).map(item => (
-              <FoodItemContainer key={keyGenerator('menu')}>
-                <PhotosSlider photos={item.photos} />
-                <Space display="block" height={Spacing.get('2x')} />
-                <FoodItem
-                  showAddToCartButton={false}
-                  onFoodNameClick={this.modal.showModal}
-                  shouldTrimDesc="true"
-                  {...item}
-                />
-              </FoodItemContainer>
-            ))}
-          </FoodMenuGrid>
+          {foodItems.size === 0 ? (
+            <NoItemsContainer>
+              <EmptyState icon="search" text="Your menu is empty. Add items to be displayed here" />
+            </NoItemsContainer>
+          ) : (
+            <FoodMenuGrid>
+              {Array.from(foodItems.values()).map(item => (
+                <FoodItemContainer key={keyGenerator('menu')}>
+                  <PhotosSlider photos={item.photos} />
+                  <Space display="block" height={Spacing.get('2x')} />
+                  <FoodItem
+                    showAddToCartButton={false}
+                    onFoodNameClick={this.modal.showModal}
+                    shouldTrimDesc="true"
+                    {...item}
+                  />
+                </FoodItemContainer>
+              ))}
+            </FoodMenuGrid>
+          )}
         </FoodMenuContainer>
 
         <PhotoExplorer
@@ -115,6 +137,7 @@ class FoodMenu extends Component {
         <FoodItemForm
           photoExplorerRef={this.photoInput}
           onItemSave={this.onItemSave}
+          onItemDelete={this.onItemDelete}
           ref={modal => {
             this.modal = modal;
           }}
