@@ -25,6 +25,11 @@ const DetailsContainer = styled.div`
   width: 100%;
 `;
 
+const FlexStart = styled.div`
+  display: flex;
+  align-items: flex-start;
+`;
+
 const ContentContainer = styled.div`
   display: grid;
   grid-template-columns: auto auto;
@@ -112,7 +117,7 @@ class FoodCard extends Component {
       <DetailsContainer>
         <ContentContainer>
           <div>
-            <CenterVertical>
+            <FlexStart>
               <Name
                 onClick={this.onFoodNameClick}
                 tag="h1"
@@ -125,7 +130,7 @@ class FoodCard extends Component {
               </Name>
               <Space width={Spacing.get('3x')} />
               <Rate rate={rate} />
-            </CenterVertical>
+            </FlexStart>
 
             <Space display="block" height={Spacing.get('1x')} />
             <Description

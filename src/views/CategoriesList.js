@@ -8,6 +8,9 @@ import Space from '../components/Space';
 import SpaceBetween from '../components/SpaceBetween';
 import Button from '../components/Button';
 import InputField from '../components/InputField';
+import EmptyState from '../components/EmptyState';
+import Center from '../components/Center';
+import Spinner from '../components/Spinner';
 
 import { FontTypes } from '../base/Fonts';
 import Colors from '../base/Colors';
@@ -29,6 +32,10 @@ const CategoriesFlex = styled.div`
   flex-wrap: wrap;
 `;
 
+const FullContent = styled.div`
+  height: 50vh;
+`;
+
 class CategoriesList extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +43,7 @@ class CategoriesList extends Component {
     document.body.style.background = Colors.white;
   }
 
-  state = { categories: new Map(), newCategory: '', isAdding: false };
+  state = { categories: new Map(), newCategory: '', isAdding: false, isLoading: true };
 
   componentDidMount() {
     Axios.get(Urls.getCategories).then(response => {
@@ -44,6 +51,7 @@ class CategoriesList extends Component {
       response.data.data.forEach(category => categories.set(category.id, category));
       this.setState({
         categories,
+        isLoading: false,
       });
     });
   }
@@ -92,7 +100,7 @@ class CategoriesList extends Component {
   };
 
   render() {
-    const { categories, newCategory, isAdding } = this.state;
+    const { categories, newCategory, isAdding, isLoading } = this.state;
 
     return (
       <CategoriesListContainer>
@@ -129,11 +137,26 @@ class CategoriesList extends Component {
 
         <Space display="block" height={Spacing.get('10x')} />
 
-        <CategoriesFlex>
-          {Array.from(categories.values()).map(category => (
-            <Category key={`cat-${category.id}`} {...category} onDelete={this.deleteCategory} />
+        {isLoading && (
+          <FullContent>
+            <Center>
+              <Spinner radius={60} />{' '}
+            </Center>
+          </FullContent>
+        )}
+
+        {!isLoading &&
+          (categories.size !== 0 ? (
+            <CategoriesFlex>
+              {Array.from(categories.values()).map(category => (
+                <Category key={`cat-${category.id}`} {...category} onDelete={this.deleteCategory} />
+              ))}
+            </CategoriesFlex>
+          ) : (
+            <FullContent>
+              <EmptyState text="You don't have any categories" />
+            </FullContent>
           ))}
-        </CategoriesFlex>
       </CategoriesListContainer>
     );
   }

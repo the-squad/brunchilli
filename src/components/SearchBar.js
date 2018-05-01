@@ -75,7 +75,7 @@ class SearchBar extends Component {
     const iconWidth = small ? 16 : 21;
 
     return (
-      <SearchBarContainer>
+      <SearchBarContainer {...this.props}>
         <FullWidth>
           <CenterVertical>
             <Space width={Spacing.get('2x')} />

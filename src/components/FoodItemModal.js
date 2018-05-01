@@ -14,6 +14,7 @@ import Spacing from '../base/Spacing';
 import keyGenerator from '../KeyGenerator';
 import User from '../models/User';
 import Review from './Review';
+import EmptyState from './EmptyState';
 
 const FootItemModalContainer = styled.div`
   padding: ${Spacing.get('4x')} ${Spacing.get('6x')} ${Spacing.get('6x')};
@@ -89,8 +90,11 @@ class FoodItemModal extends Component {
         <FootItemModalContainer>
           <FoodItem {...this.state} showAddToCartButton={false} enableFoodNameAction="false" />
           <Space display="block" height={Spacing.get('6x')} />
+
           <Text type={FontTypes.Heading}>Reviews</Text>
           <Space display="block" height={Spacing.get('4x')} />
+
+          {comments.length === 0 && <EmptyState icon="star" text="There is no reviews yet" />}
 
           <CommentsContainer>
             {isUserExists && (
