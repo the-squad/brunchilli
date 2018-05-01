@@ -19,6 +19,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Comment whereComment($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Comment whereFoodId($value)
  * @property-read \App\Food $food
+ * @property string $review
+ * @property int $rate
+ * @property int $user_id
+ * @property-read \App\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Comment whereRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Comment whereReview($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Comment whereUserId($value)
  */
 class Comment extends Model
 {

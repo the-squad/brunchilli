@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Photo wherePath($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Photo whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Food $food
  */
 class Photo extends Model
 {

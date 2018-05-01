@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Food whereRate($value)
  * @property-read \App\FoodCategory $category
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Comment[] $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $orders
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Photo[] $photos
  */
 class Food extends Model
 {
