@@ -119,7 +119,7 @@ class FoodCard extends Component {
                 type={FontTypes.Heading}
                 fontWeight={FontWeights.bold}
                 enable={enableFoodNameAction}
-                lineheight="14px"
+                lineheight="20px"
               >
                 {name}
               </Name>
@@ -147,7 +147,7 @@ class FoodCard extends Component {
 
         <AlignBottom>
           <SpaceBetween>
-            <Tag>{category}</Tag>
+            {category && <Tag>{category}</Tag>}
 
             {showAddToCartButton && (
               <AddToCartButton primary={false} onClick={this.onCartClick}>
