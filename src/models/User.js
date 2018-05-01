@@ -35,6 +35,7 @@ class User {
     email: this.email,
     phone: this.phone,
     address: this.address,
+    isAdmin: this.isAdmin,
   });
 
   isUserExists = () => !!this.id || !!Cookies.get(USER_ID);
