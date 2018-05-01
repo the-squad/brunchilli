@@ -51,6 +51,8 @@ class BackgroundImage extends Component {
     }
     const nextImage = this.images[this.currentIndex];
 
+    if (!this.fullImage) return;
+
     this.fullImage.src = nextImage.urls.regular;
     this.fullImage.onload = () => {
       document.body.style.backgroundImage = `url('${nextImage.urls.regular}')`;
