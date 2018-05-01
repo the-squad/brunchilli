@@ -97,7 +97,7 @@ const OrderRow = ({
         color={isHeader && Colors.white}
         fontWeight={isHeader && FontWeights.bold}
       >
-        {total} {!isHeader && 'L.E'}
+        {parseFloat(total).toFixed(2)} {!isHeader && 'L.E'}
       </Text>
     </JustifyEnd>
   </OrderRowContainer>
