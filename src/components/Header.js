@@ -166,6 +166,9 @@ class Header extends Component {
             <Tab activeClassName="active" to="/categories">
               Categories List
             </Tab>
+            <Tab activeClassName="active" to="/orders">
+              Order History
+            </Tab>
           </div>
         )}
 
