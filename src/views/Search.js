@@ -11,6 +11,7 @@ import SearchBar from '../components/SearchBar';
 import Space from '../components/Space';
 import Text from '../components/Text';
 import Pagination from '../components/Pagination';
+import Center from '../components/Center';
 
 import { FontTypes } from '../base/Fonts';
 import Colors from '../base/Colors';
@@ -19,13 +20,14 @@ import Spacing from '../base/Spacing';
 import keyGenerator from '../KeyGenerator';
 import Urls from '../Urls';
 import EmptyState from '../components/EmptyState';
+import Spinner from '../components/Spinner';
 
 const SearchGrid = styled.div`
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 63% 35%;
   width: 100%;
   padding: ${Spacing.get('4x')} ${Spacing.get('10x')};
-  grid-column-gap: ${Spacing.get('4x')};
+  grid-column-gap: 2%;
 `;
 
 const CardsList = styled.div`
@@ -33,6 +35,11 @@ const CardsList = styled.div`
   grid-template-columns: auto;
   grid-auto-rows: auto;
   grid-row-gap: ${Spacing.get('3x')};
+  width: 100%;
+`;
+
+const StyledSearch = styled(SearchBar)`
+  width: 100%;
 `;
 
 class Search extends Component {
@@ -53,32 +60,46 @@ class Search extends Component {
     searchResults: [],
     isLoadingMore: false,
     disableLoadMore: true,
+    isLoading: true,
   };
 
   componentDidMount() {
-    this.search();
+    this.search(1, { pushToCurrent: false });
   }
 
   onSearch = query => {
     const queryString = `search=${query}`;
     this.props.history.push(`/results/?${queryString}`);
 
-    this.search();
+    this.search(1, { pushToCurrent: false });
   };
 
-  onLoadMore = () => {
-    // TODO: connect with searchAPI
+  onLoadMore = pageNumber => {
     this.setState({
       isLoadingMore: true,
     });
+    this.search(pageNumber, { pushToCurrent: true });
   };
 
-  search = () => {
+  search = (pageNumber = 1, { pushToCurrent }) => {
     const queryString = QueryString.parse(window.location.search);
     const searchQuery = queryString.search || '';
-    Axios.get(`${Urls.search}?query=${searchQuery}`).then(response => {
-      this.setState({
-        searchResults: response.data.data,
+    Axios.get(`${Urls.search}?query=${searchQuery}&page=${pageNumber}`).then(response => {
+      this.setState(prevState => {
+        const incomingSearchResults = response.data.data;
+        let { searchResults } = prevState;
+        if (pushToCurrent) {
+          incomingSearchResults.map(newItem => searchResults.push(newItem));
+        } else {
+          searchResults = incomingSearchResults;
+        }
+
+        return {
+          searchResults,
+          isLoading: false,
+          disableLoadMore: response.data.meta.last_page === pageNumber,
+          isLoadingMore: false,
+        };
       });
     });
   };
@@ -90,7 +111,7 @@ class Search extends Component {
   addItemToCart = item => this.cart.addToCart(item);
 
   render() {
-    const { isLoadingMore, searchResults, disableLoadMore } = this.state;
+    const { isLoadingMore, searchResults, disableLoadMore, isLoading } = this.state;
 
     return (
       <Fragment>
@@ -101,7 +122,7 @@ class Search extends Component {
         />
         <SearchGrid>
           <div>
-            <SearchBar small query={this.searchQuery} onSearch={this.onSearch} />
+            <StyledSearch small query={this.searchQuery} onSearch={this.onSearch} />
 
             <Space display="block" height={Spacing.get('4x')} />
 
@@ -111,33 +132,39 @@ class Search extends Component {
 
             <Space display="block" height={Spacing.get('4x')} />
 
-            <Pagination
-              onLoadMore={this.onLoadMore}
-              isLoading={isLoadingMore}
-              disable={disableLoadMore}
-            >
-              {searchResults.length === 0 ? (
-                <EmptyState icon="search" text="No items matched your search" />
-              ) : (
-                <CardsList>
-                  {searchResults.map(item => (
-                    <FoodCard
-                      key={keyGenerator('food')}
-                      id={item.id}
-                      photos={item.photos}
-                      name={item.name}
-                      desc={item.desc}
-                      category={item.category}
-                      rate={item.rate}
-                      price={item.price}
-                      comments={item.comments}
-                      showFoodDetails={this.showFoodItemModal}
-                      onAddToCartClick={this.addItemToCart}
-                    />
-                  ))}
-                </CardsList>
-              )}
-            </Pagination>
+            {isLoading ? (
+              <Center>
+                <Spinner radius={60} />
+              </Center>
+            ) : (
+              <Pagination
+                onLoadMore={this.onLoadMore}
+                isLoading={isLoadingMore}
+                disable={disableLoadMore}
+              >
+                {searchResults.length === 0 ? (
+                  <EmptyState icon="search" text="No items matched your search" />
+                ) : (
+                  <CardsList>
+                    {searchResults.map(item => (
+                      <FoodCard
+                        key={keyGenerator('food')}
+                        id={item.id}
+                        photos={item.photos}
+                        name={item.name}
+                        desc={item.desc}
+                        category={item.category}
+                        rate={item.rate}
+                        price={item.price}
+                        comments={item.comments}
+                        showFoodDetails={this.showFoodItemModal}
+                        onAddToCartClick={this.addItemToCart}
+                      />
+                    ))}
+                  </CardsList>
+                )}
+              </Pagination>
+            )}
           </div>
           <Cart
             ref={cart => {
