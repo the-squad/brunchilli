@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import QueryString from 'query-string';
 
 import Text from './Text';
 import CirclePhoto from './CirclePhoto';
@@ -93,12 +92,13 @@ class Header extends Component {
   );
 
   setCallbackUrl = () => {
-    const queryString = QueryString.parse(window.location.search);
-    let { returnUrl } = queryString;
-    if (!returnUrl) {
-      returnUrl = '/';
+    if (
+      !window.location.pathname.includes('register') &&
+      !window.location.pathname.includes('login')
+    ) {
+      return `${window.location.pathname}`;
     }
-    return `${window.location.pathname}${returnUrl}`;
+    return '/';
   };
 
   getDefaultItems = () => (
