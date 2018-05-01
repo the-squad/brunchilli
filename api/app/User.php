@@ -65,6 +65,8 @@ class User extends Authenticatable
 
     public function getPhotoPath()
     {
-        return asset("/storage".$this->photo);
+        if ($this->photo)
+            return asset("/storage".$this->photo);
+        return asset("user-placeholder.png");
     }
 }
