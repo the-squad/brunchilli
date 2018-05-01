@@ -18,7 +18,7 @@ class OrderDetailsResponce extends JsonResource
             "foodId" => $this->id,
             "name" => $this->name,
             "amount" => $this->pivot->quantity,
-            "price" => $this->price * $this->pivot->quantity,
+            "price" => $this->price,
             "category" => $this->category ? $this->category->name : "",
             "categoryId" => $this->category ? $this->category->id : "",
         ];
