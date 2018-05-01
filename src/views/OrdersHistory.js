@@ -11,6 +11,9 @@ import Spacing from '../base/Spacing';
 import Colors from '../base/Colors';
 import OrderDetails from '../components/OrderDetails';
 import Urls from '../Urls';
+import Center from '../components/Center';
+import Spinner from '../components/Spinner';
+import EmptyState from '../components/EmptyState';
 
 const OrdersHistoryContainer = styled.div`
   width: 100%;
@@ -37,8 +40,12 @@ const Divider = styled.div`
   background-color: ${Colors.grey};
 `;
 
+const FullContent = styled.div`
+  height: 50vh;
+`;
+
 class OrdersHistory extends Component {
-  state = { orders: new Map(), currentSelectedItem: -1, orderDetails: [] };
+  state = { orders: new Map(), currentSelectedItem: -1, orderDetails: [], isLoading: true };
 
   componentDidMount() {
     Axios.get(Urls.getOrders).then(response => {
@@ -48,6 +55,7 @@ class OrdersHistory extends Component {
 
         return {
           orders,
+          isLoading: false,
         };
       });
     });
@@ -61,7 +69,7 @@ class OrdersHistory extends Component {
   };
 
   render() {
-    const { orders, currentSelectedItem, orderDetails } = this.state;
+    const { orders, currentSelectedItem, orderDetails, isLoading } = this.state;
 
     return (
       <OrdersHistoryContainer>
@@ -74,44 +82,59 @@ class OrdersHistory extends Component {
 
         <Space display="block" height={Spacing.get('4x')} />
 
-        <OrdersHistoryGrid>
-          <OrdersHistoryList>
-            <OrderRow
-              name="Customer"
-              date="Date"
-              address="Address"
-              phoneNumber="Phone Number"
-              total="Total"
-              isHeader
-            />
+        {isLoading && (
+          <FullContent>
+            <Center>
+              <Spinner radius={60} />
+            </Center>
+          </FullContent>
+        )}
 
-            {Array.from(orders.values()).map(order => {
-              let total = 0;
-              order.orderDetails.forEach(orderDetailsMap => {
-                total += orderDetailsMap.price * orderDetailsMap.amount;
-              });
-
-              return (
+        {!isLoading &&
+          (orders.size === 0 ? (
+            <FullContent>
+              <EmptyState text="There are no order history" />{' '}
+            </FullContent>
+          ) : (
+            <OrdersHistoryGrid>
+              <OrdersHistoryList>
                 <OrderRow
-                  isActive={order.orderId === currentSelectedItem}
-                  id={order.orderId}
-                  photo={order.photo}
-                  name={order.name}
-                  date={order.orderDate}
-                  address={order.address}
-                  phoneNumber={order.phoneNumber}
-                  total={total}
-                  items={order.orderDetails}
-                  onClick={this.showOrderDetails}
+                  name="Customer"
+                  date="Date"
+                  address="Address"
+                  phoneNumber="Phone Number"
+                  total="Total"
+                  isHeader
                 />
-              );
-            })}
-          </OrdersHistoryList>
 
-          <Divider />
+                {Array.from(orders.values()).map(order => {
+                  let total = 0;
+                  order.orderDetails.forEach(orderDetailsMap => {
+                    total += orderDetailsMap.price * orderDetailsMap.amount;
+                  });
 
-          <OrderDetails items={orderDetails} />
-        </OrdersHistoryGrid>
+                  return (
+                    <OrderRow
+                      isActive={order.orderId === currentSelectedItem}
+                      id={order.orderId}
+                      photo={order.photo}
+                      name={order.name}
+                      date={order.orderDate}
+                      address={order.address}
+                      phoneNumber={order.phoneNumber}
+                      total={total}
+                      items={order.orderDetails}
+                      onClick={this.showOrderDetails}
+                    />
+                  );
+                })}
+              </OrdersHistoryList>
+
+              <Divider />
+
+              <OrderDetails items={orderDetails} />
+            </OrdersHistoryGrid>
+          ))}
       </OrdersHistoryContainer>
     );
   }

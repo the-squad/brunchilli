@@ -8,6 +8,8 @@ import FoodItem from '../components/FoodItem';
 import Space from '../components/Space';
 import FoodItemForm from '../components/FoodItemForm';
 import EmptyState from '../components/EmptyState';
+import Center from '../components/Center';
+import Spinner from '../components/Spinner';
 
 import { FontTypes } from '../base/Fonts';
 import Colors from '../base/Colors';
@@ -40,7 +42,7 @@ const FoodItemContainer = styled.div`
   overflow: hidden;
 `;
 
-const NoItemsContainer = styled.div`
+const FullContent = styled.div`
   height: 50vh;
 `;
 
@@ -51,7 +53,7 @@ class FoodMenu extends Component {
     document.body.style.background = Colors.white;
   }
 
-  state = { foodItems: new Map() };
+  state = { foodItems: new Map(), isLoading: true };
 
   componentDidMount() {
     Axios.get(`${Urls.search}?query=`).then(response => {
@@ -60,6 +62,7 @@ class FoodMenu extends Component {
 
       this.setState({
         foodItems,
+        isLoading: false,
       });
     });
   }
@@ -87,7 +90,7 @@ class FoodMenu extends Component {
   };
 
   render() {
-    const { foodItems } = this.state;
+    const { foodItems, isLoading } = this.state;
 
     return (
       <Fragment>
@@ -106,10 +109,18 @@ class FoodMenu extends Component {
 
           <Space display="block" height={Spacing.get('10x')} />
 
-          {foodItems.size === 0 ? (
-            <NoItemsContainer>
+          {isLoading && (
+            <FullContent>
+              <Center>
+                <Spinner radius={60} />
+              </Center>
+            </FullContent>
+          )}
+
+          {!isLoading && foodItems.size === 0 ? (
+            <FullContent>
               <EmptyState icon="search" text="Your menu is empty. Add items to be displayed here" />
-            </NoItemsContainer>
+            </FullContent>
           ) : (
             <FoodMenuGrid>
               {Array.from(foodItems.values()).map(item => (
