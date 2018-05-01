@@ -16,6 +16,7 @@ const urls = {
   editFood: `${baseUrl}/api/food`,
   deleteFood: `${baseUrl}/api/food`,
   order: `${baseUrl}/api/order`,
+  getOrders: `${baseUrl}/api/order`,
 };
 
 export default urls;
