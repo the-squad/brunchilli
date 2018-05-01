@@ -20,9 +20,9 @@ class CreateOrderDetailsTable extends Migration
             $table->timestamps();
 
             $table->integer('order_id')->unsigned();
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->integer('food_id')->unsigned();
-            $table->foreign('food_id')->references('id')->on('foods');
+            $table->foreign('food_id')->references('id')->on('foods')->onDelete('cascade');
         });
     }
 
