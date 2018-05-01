@@ -25,7 +25,7 @@ import Urls from '../Urls';
 
 const CartContainer = styled.div`
   padding: ${Spacing.get('6x')};
-  width: 400px;
+  min-width: 400px;
   background-color: ${Colors.white};
   border-radius: 4px;
   height: max-content;
