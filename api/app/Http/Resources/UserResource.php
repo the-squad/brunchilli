@@ -9,7 +9,7 @@ class UserResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -21,6 +21,7 @@ class UserResource extends JsonResource
             "photo" => $this->getPhotoPath(),
             "address" => $this->address,
             "phone" => $this->phone,
+            "isAdmin" => $this->type ? true : false
         ];
     }
 }
