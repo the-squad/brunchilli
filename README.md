@@ -2,7 +2,7 @@
 
 A online food ordering website build with React and PHP laravel
 
-![Demo Video](https://media.giphy.com/media/46j494qvezrycaXk6v/giphy.gif)
+![Demo Video](https://media.giphy.com/media/9ryLmyELCzZaSYw9xb/giphy.gif)
 
 ## Getting Started
 
