@@ -2,6 +2,8 @@
 
 A online food ordering website build with React and PHP laravel
 
+![Demo Video](https://media.giphy.com/media/46j494qvezrycaXk6v/giphy.gif)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -19,14 +21,14 @@ These instructions will get you a copy of the project up and running on your loc
 
 Rename `example.env` to `.env` and add the keys you generated
 
-```
+```sh
 REACT_APP_UNSPLASH_APP_ID=
 REACT_APP_UNSPLASH_ACCESS_CODE=
 ```
 
 Install the required packages and run the local server
 
-```
+```sh
 yarn start
 yarn
 ```
@@ -35,7 +37,7 @@ yarn
 
 Install laravel framework
 
-```
+```sh
 composer global require "laravel/installer"
 ```
 
@@ -54,25 +56,25 @@ DB_PASSWORD=secret
 
 Install the required packages and run the local server
 
-```
+```sh
 composer install
 ```
 
 Generate database tables and relations
 
-```
+```sh
 php artisan migrate
 ```
 
 Create `img` folder inside `storage/app/public` and run
 
-```
+```sh
 php artisan storage:link
 ```
 
 Run the localhost
 
-```
+```sh
 php artisan serve
 ```
 
@@ -84,7 +86,7 @@ Front-end part is following Airbnb styles guide
 
 ### Front-end part
 
-```
+```sh
 yarn build
 ```
 
