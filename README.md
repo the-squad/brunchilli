@@ -29,8 +29,8 @@ REACT_APP_UNSPLASH_ACCESS_CODE=
 Install the required packages and run the local server
 
 ```sh
-yarn start
 yarn
+yarn start
 ```
 
 #### Back-end part
